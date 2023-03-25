@@ -33,7 +33,7 @@ In this second step. we strip the startup code from the `main.c` file and create
 
 ## Tools Setup
 
-1. GNU toolchain\
+1. GNU toolchain
 
    - for debian based systems:
 
@@ -63,11 +63,11 @@ In this second step. we strip the startup code from the `main.c` file and create
 
 ## Project Structure
 
-1. `src/main.c`
+1. `src/main.c`\
    The main function for the application, separated from the startup code. initializes the peripherals and infinitely blinks the LED.
-2. `src/startup_stm32f4.c`
+2. `src/startup_stm32f4.c`\
    The startup script for the micro-controller, stripped from `src/main.c`.
-3. `stm32f4.ld`
+3. `stm32f4.ld`\
    This is the linker script required by the linker to create the binary in the layout required by the micro-controller.
 
 ## Memory map
@@ -175,23 +175,30 @@ static inline void gpio_reset(struct gpio* port, uint32_t pin){
 
 ## Building
 
+This step involves compiling the source file separately and linking the relocatable object files to generate the final executable object file. In the next step the executable object file is converted into the binary format understood by the micro-controller.
+
 ### Compilation
 
 Run the following command to compile the `main.c` file and generate executable.
 
 ```bash
-    arm-none-eabi-gcc -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -nostartfiles -nostdlib -o src/main.o -c src/main.c
-    arm-none-eabi-gcc -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -nostartfiles -nostdlib -o src/startup_stm32f4.o -c src/startup_stm32f4.c
-    arm-none-eabi-gcc -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -nostartfiles -nostdlib -o blink.elf src/main.o src/startup_stm32f4.o -Tstm32f4.ld
+arm-none-eabi-gcc -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -nostartfiles -nostdlib -o src/main.o -c src/main.c
+arm-none-eabi-gcc -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -nostartfiles -nostdlib -o src/startup_stm32f4.o -c src/startup_stm32f4.c
+arm-none-eabi-gcc -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -nostartfiles -nostdlib -o blink.elf src/main.o src/startup_stm32f4.o -Tstm32f4.ld
 ```
 
 Flags:
 
-1. `-mcpu=cortex-m4`: specifies the target cpu type
-2. `-mfloat-abi=soft`: specifies FPU settings (Use software floating point unit)
-3. `-mthumb`: specifies to use the _THUMB2_ instruction set
-4. `-nostartfiles -nostdlib`: instructs compiler not to link standard libraries
-5. `-Tstm32f4.ld`: Specifies the linker script for the linker
+1. `-mcpu=cortex-m4`\
+   Specifies the target cpu type
+2. `-mfloat-abi=soft`\
+   Specifies FPU settings (Use software floating point unit)
+3. `-mthumb`\
+   Specifies to use the _THUMB2_ instruction set
+4. `-nostartfiles -nostdlib`\
+   Instructs compiler not to link standard libraries
+5. `-Tstm32f4.ld`\
+   Specifies the linker script for the linker
 
 ### Generate binary from executable
 
