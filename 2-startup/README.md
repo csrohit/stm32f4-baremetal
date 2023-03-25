@@ -1,7 +1,8 @@
-# STM32F4 Baremetal Blinky Program using a single file
+# STM32F4 Baremetal: Create a separate startup script
 
 <!--toc:start-->
-- [STM32F4 Baremetal Blinky Program using a single file](#stm32f4-baremetal-blinky-program-using-a-single-file)
+
+- [STM32F4 Baremetal: Create a separate startup script](#stm32f4-baremetal-create-a-separate-startup-script)
   - [Tools Setup](#tools-setup)
   - [Project Structure](#project-structure)
   - [Memory map](#memory-map)
@@ -11,56 +12,63 @@
   - [Registers](#registers)
     - [RCC](#rcc)
     - [GPIO](#gpio)
+    - [Blinking](#blinking)
   - [Building](#building)
-  - [Flashing](#flashing)
+    - [Compilation](#compilation)
+    - [Generate binary from executable](#generate-binary-from-executable)
+    - [Flashing](#flashing)
   - [Output](#output)
-<!--toc:end-->
+  <!--toc:end-->
 
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 
 This guide is meant for embedded developers who wish to get the know how of flow of embedded systems developement. This guide dives in detail about programming embedded sysetems using only the bare-minimum tools mentioned below
 
-1. arm-none-eabi-gcc -  Cross Compiler for Arm Cortex M systems
+1. arm-none-eabi-gcc - Cross Compiler for Arm Cortex M systems
 2. Datasheet for target micro-controller
 3. Text editor
 4. ST Link - Programmer to flash the binary on the board
 
-In the first step the entire program is written in a single file and compiled using a single command.
+In this second step. we strip the startup code from the `main.c` file and create a separate startup script.
 
 ## Tools Setup
 
 1. GNU toolchain\
-    - for debian based systems:
 
-    ```bash
-    sudo apt install build-essential
-    ```
+   - for debian based systems:
 
-    - for Mac OS
+   ```bash
+   sudo apt install build-essential
+   ```
 
-    ```bash
-    brew install gcc-arm-embedded
-    ```
+   - for Mac OS
+
+   ```bash
+   brew install gcc-arm-embedded
+   ```
 
 2. ST Link drivers
-    - for debian based systems
 
-    ```bash
-    sudo apt install stlink-tools
-    ```
+   - for debian based systems
 
-    - for Mac OS
+   ```bash
+   sudo apt install stlink-tools
+   ```
 
-    ```bash
-    brew install stlink
-    ```
+   - for Mac OS
+
+   ```bash
+   brew install stlink
+   ```
 
 ## Project Structure
 
-1. `main.c`
-As mentioned this is a single file project and all the code required to blink the LED is in this file.
-2. `stm32f4.ld`
-This is the linker script required by the linker to create the binary in the layout required by the micro-controller.
+1. `src/main.c`
+   The main function for the application, separated from the startup code. initializes the peripherals and infinitely blinks the LED.
+2. `src/startup_stm32f4.c`
+   The startup script for the micro-controller, stripped from `src/main.c`.
+3. `stm32f4.ld`
+   This is the linker script required by the linker to create the binary in the layout required by the micro-controller.
 
 ## Memory map
 
@@ -79,7 +87,7 @@ _estack = ORIGIN(SRAM) + LENGTH(SRAM);
 SECTIONS
 {
     .isr_vector :
-    { 
+    {
         . = ALIGN(4);
         KEEP(*(.isr_vector)) /* Startup code */
         . = ALIGN(4);
@@ -95,7 +103,7 @@ SECTIONS
 }
 ```
 
-From the above snippet it is understood that the `.text` section is mapped to *FLASH* memory region. The size of *FLASH* is 64KB and its address range starts from `0x2000000`;
+From the above snippet it is understood that the `.text` section is mapped to _FLASH_ memory region. The size of _FLASH_ is 64KB and its address range starts from `0x2000000`;
 
 ## Boot sequence of MCU
 
@@ -115,16 +123,16 @@ void (*vectors[16 + 52])(void) __attribute__((section(".isr_vector"))) = {
 
 ```
 
-Here `vectors` is an array of function pointer which is decorated with a compiler attribute called `section`. This will place this array in a separate section named `.isr_vector`. The linker file ensures that this is placed at the first memory location in the *FLASH*.
+Here `vectors` is an array of function pointer which is decorated with a compiler attribute called `section`. This will place this array in a separate section named `.isr_vector`. The linker file ensures that this is placed at the first memory location in the _FLASH_.
 The first entry in the array (vector table) is the value of stack pointer which is defined in linker file and second entry is the address of out reset handler.
 
 ### Reset handler
 
-After setting up the stack the control jumps to the Reset_Handler. We copy the `.data` section from *FLASH* to *SRAM* and initializes the `.bss` section. We call the `main()` function next and fall into infinite loop if it fails.
+After setting up the stack the control jumps to the Reset*Handler. We copy the `.data` section from \_FLASH* to _SRAM_ and initializes the `.bss` section. We call the `main()` function next and fall into infinite loop if it fails.
 
 ## Registers
 
-We need to configure only 3 registers to blink the onboard LED connected to pin C13. To access those registers we have defined a structure each for the *RCC (Reset and Clock Control)* & *GPIO* peripherals according to the datasheet. The individual registers in those peripherals are accessed as pointers.
+We need to configure only 3 registers to blink the onboard LED connected to pin C13. To access those registers we have defined a structure each for the _RCC (Reset and Clock Control)_ & _GPIO_ peripherals according to the datasheet. The individual registers in those peripherals are accessed as pointers.
 
 ### RCC
 
@@ -134,7 +142,7 @@ We need to enable the clock on the GPIO port in order to modify its registers. W
 RCC->AHB1ENR |= 1 << 2;
 ```
 
-In above snippet, we are setting the 2nd bit in the `AHB1ENR` register as PORTC is connected to *APB1* bus and the bit number is calculated according to the datasheet.
+In above snippet, we are setting the 2nd bit in the `AHB1ENR` register as PORTC is connected to _APB1_ bus and the bit number is calculated according to the datasheet.
 
 ![APB1ENR Register](./docs/APB1ENR.png)
 
@@ -144,7 +152,7 @@ We have to configure the pin 13 on GPIO port C in output mode as follows.
 
 ![MODER Register](./docs/MODER.png)
 
-As per the datasheet we set the *Bit 26* of the `MODER` register to configure Pin13 in output mode. First we clear the bits 26 & 27 to reset any default configuration and then set bits according to the datasheet.
+As per the datasheet we set the _Bit 26_ of the `MODER` register to configure Pin13 in output mode. First we clear the bits 26 & 27 to reset any default configuration and then set bits according to the datasheet.
 
 ```C
  GPIOC->MODER &= ~ 3U  << (13 * 2);  // clear previous configuration
@@ -152,6 +160,7 @@ As per the datasheet we set the *Bit 26* of the `MODER` register to configure Pi
 ```
 
 ### Blinking
+
 TO blink the LED we have to write 1 & 0 to the pin with some delay in between. To achieve this we have added helper functions as follows:
 
 ```C
@@ -171,20 +180,22 @@ static inline void gpio_reset(struct gpio* port, uint32_t pin){
 Run the following command to compile the `main.c` file and generate executable.
 
 ```bash
-    arm-none-eabi-gcc -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -nostartfiles -nostdlib -o blink.elf main.c -Tstm32f4.ld
+    arm-none-eabi-gcc -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -nostartfiles -nostdlib -o src/main.o -c src/main.c
+    arm-none-eabi-gcc -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -nostartfiles -nostdlib -o src/startup_stm32f4.o -c src/startup_stm32f4.c
+    arm-none-eabi-gcc -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -nostartfiles -nostdlib -o blink.elf src/main.o src/startup_stm32f4.o -Tstm32f4.ld
 ```
 
 Flags:
 
 1. `-mcpu=cortex-m4`: specifies the target cpu type
 2. `-mfloat-abi=soft`: specifies FPU settings (Use software floating point unit)
-3. `-mthumb`: specifies to use the *THUMB2* instruction set
+3. `-mthumb`: specifies to use the _THUMB2_ instruction set
 4. `-nostartfiles -nostdlib`: instructs compiler not to link standard libraries
 5. `-Tstm32f4.ld`: Specifies the linker script for the linker
 
 ### Generate binary from executable
 
-The above command generates an *ELF* file which is not suitable for flashing to micro-controller, so in the next step we convert the *ELF* file into the *BINARY* image required for flashing.
+The above command generates an _ELF_ file which is not suitable for flashing to micro-controller, so in the next step we convert the _ELF_ file into the _BINARY_ image required for flashing.
 
 ```bash
 arm-none-eabi-objcopy -Obinary blink.elf blink.bin
@@ -198,7 +209,7 @@ In the final step we flash the generated binary image to the micro-controller.
 st-flash --connect-under-reset write blink.bin 0x8000000
 ```
 
-This command flashes the binary image at address `0x8000000` as the *FLASH* memory starts from that address.
+This command flashes the binary image at address `0x8000000` as the _FLASH_ memory starts from that address.
 
 ## Output
 
