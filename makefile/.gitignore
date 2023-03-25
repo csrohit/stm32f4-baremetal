@@ -1,7 +1,0 @@
-build
-compile_commands.json
-.cache
-.DS_Store
-*.bin
-*.elf
-*.o
