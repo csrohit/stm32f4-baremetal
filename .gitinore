@@ -1,6 +1,0 @@
-.DA_Store
-*.elf
-*.d
-*.o
-*.s
-.cache
