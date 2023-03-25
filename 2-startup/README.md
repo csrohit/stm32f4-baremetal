@@ -144,19 +144,19 @@ RCC->AHB1ENR |= 1 << 2;
 
 In above snippet, we are setting the 2nd bit in the `AHB1ENR` register as PORTC is connected to _APB1_ bus and the bit number is calculated according to the datasheet.
 
-![APB1ENR Register](./docs/APB1ENR.png)
+![APB1ENR Register](../docs/APB1ENR.png)
 
 ### GPIO
 
 We have to configure the pin 13 on GPIO port C in output mode as follows.
 
-![MODER Register](./docs/MODER.png)
+![MODER Register](../docs/MODER.png)
 
 As per the datasheet we set the _Bit 26_ of the `MODER` register to configure Pin13 in output mode. First we clear the bits 26 & 27 to reset any default configuration and then set bits according to the datasheet.
 
 ```C
- GPIOC->MODER &= ~ 3U  << (13 * 2);  // clear previous configuration
-    GPIOC->MODER |= (GPIO_MODE_OUTPUT & 3U) << (13 * 2);   // Set new mode
+GPIOC->MODER &= ~ 3U  << (13 * 2);  // clear previous configuration
+GPIOC->MODER |= (GPIO_MODE_OUTPUT & 3U) << (13 * 2);   // Set new mode
 ```
 
 ### Blinking
