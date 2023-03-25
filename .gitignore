@@ -50,7 +50,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-.DA_Store
+.DS_Store
 *.elf
 *.d
 *.o
