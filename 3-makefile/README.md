@@ -62,7 +62,7 @@ In this second step. we strip the startup code from the `main.c` file and create
 3. `stm32f4.ld`\
    This is the linker script required by the linker to create the binary in the layout required by the micro-controller.
 4. `Makefile`\
-   The make script for automating the build process and avoid typing the long compilation commands everytime. For more information on makefile visit ![Makefile Tutorial](https://makefiletutorial.com)
+   The make script for automating the build process and avoid typing the long compilation commands everytime. For more information on makefile visit [Makefile Tutorial](https://makefiletutorial.com)
 
 ## Makefile
 
@@ -113,6 +113,7 @@ We use `make` utility to automate the task of building and linking the source co
    - `flash` - target to upload the binary to the micro-controller
    - `clean` - target to clean all the build files
 🗃️
+
 ## Building
 
 This step involves compiling the source file separately and linking the relocatable object files to generate the final executable object file. In the next step the executable object file is converted into the binary format understood by the micro-controller.
