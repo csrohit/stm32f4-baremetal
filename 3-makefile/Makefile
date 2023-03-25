@@ -1,0 +1,46 @@
+TARGET = blink
+
+LDSCRIPT 	= stm32f4.ld
+
+PREFIX      =   arm-none-eabi
+CC          =   ${PREFIX}-gcc
+LD 		    =   ${PREFIX}-ld
+AS 		    =   ${PREFIX}-as
+GDB 	    =   ${PREFIX}-gdb
+OBJCOPY     =   ${PREFIX}-objcopy
+SIZE     	=   ${PREFIX}-size
+
+MCU_FLAGS 	= -mcpu=cortex-m4 -mfloat-abi=soft -mthumb
+
+LDFLAGS     := $(MCU_FLAGS) -nostdlib 
+CFLAGS      := $(MCU_FLAGS) -nostdlib -Os
+
+SRC_DIRS    := src
+BUILD_DIR   := build
+
+SRCS        := $(shell find $(SRC_DIRS) -name '*.c')
+OBJS        := $(SRCS:%.c=$(BUILD_DIR)/%.o) 
+
+all : bin size
+elf : $(BUILD_DIR)/$(TARGET).elf
+bin : $(BUILD_DIR)/$(TARGET).bin
+size: $(BUILD_DIR)/$(TARGET).size 
+
+%.bin: %.elf
+	$(OBJCOPY) -Obinary $(*).elf $(*).bin
+
+%.size: %.elf
+	$(SIZE) $<
+
+$(BUILD_DIR)/$(TARGET).elf: $(OBJS) 
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) -T$(LDSCRIPT) -Wl,-Map="$(BUILD_DIR)/$(TARGET).map"
+
+$(BUILD_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+flash: bin
+	st-flash write $(BUILD_DIR)/$(TARGET).bin 0x8000000
+
+clean:
+	rm -rf $(BUILD_DIR)

@@ -23,24 +23,13 @@ enum { GPIO_MODE_INPUT, GPIO_MODE_OUTPUT, GPIO_MODE_AF, GPIO_MODE_ANALOG };
 /* Function declaration */
 extern void _estack(void);
 
-__attribute__((weak)) void *memcpy(void *dest, const void *src, uint32_t n);
-__attribute__((weak)) void *memset(void *dst0, int c, uint32_t length);
-
 static inline void gpio_set(struct gpio* port, uint32_t pin);
 static inline void gpio_reset(struct gpio* port, uint32_t pin);
+
 void ms_delay(int ms);
-void Reset_Handler(void);
-int main();
 
 #define RCC ((struct rcc *) 0x40023800)
 #define GPIOC ((struct gpio *)0x40020800)
-
-// Define the veector table
-void (*vectors[16 + 52])(void) __attribute__((section(".isr_vector"))) = {
-    _estack,
-    Reset_Handler,
-};
-
 
 int main(void)
 {
@@ -52,45 +41,10 @@ int main(void)
 
 	while(1){
         gpio_set(GPIOC, 13);
-		ms_delay(500);
+		ms_delay(1000);
         gpio_reset(GPIOC, 13);
-<<<<<<<< HEAD:main.c
 		ms_delay(500);
-========
-		ms_delay(100);
->>>>>>>> d735e6e (♻️  refactor code):makefile/src/main.c
 	}
-}
-
-
-// Command: reset memory and restart user program
-void Reset_Handler(void)
-{
-    extern uint32_t _sdata, _edata, _la_data, _sbss, _ebss;
-    
-    memcpy(&_sdata, &_la_data, &_edata - &_sdata);
-    memset(&_sbss, 0, &_ebss - &_sbss);
-
-    main();
-    while(1);
-}
-
-__attribute__((weak)) void *memcpy(void *dest, const void *src, uint32_t n)
-{
-    for (uint32_t i = 0; i < n; i++)
-    {
-        ((char*)dest)[i] = ((char*)src)[i];
-    }
-    return dest;
-}
-
-__attribute__((weak)) void *memset(void *dst0, int c, uint32_t length){
-	char *dst = (char*)dst0;
-	while (length--){
-		*dst = (char) c;
-		dst++;
-	}
-	return dst0;
 }
 
 void ms_delay(int ms)
