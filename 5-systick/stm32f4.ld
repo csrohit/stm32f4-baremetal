@@ -1,51 +1,79 @@
+
+
+/* Entry Point */
 ENTRY(Reset_Handler)
 
+/* value of stack pointer */
+_estack = ORIGIN(RAM) + LENGTH(RAM);
+
+/* Memories definition */
 MEMORY
 {
-    FLASH(rx):    ORIGIN = 0x08000000,    LENGTH =256K
-    SRAM(rwx):    ORIGIN = 0x20000000,    LENGTH =64K
+  RAM    (xrw)    : ORIGIN = 0x20000000,   LENGTH = 64K
+  FLASH    (rx)    : ORIGIN = 0x8000000,   LENGTH = 256K
 }
 
-_estack = ORIGIN(SRAM) + LENGTH(SRAM);
-
+/* Sections */
 SECTIONS
 {
-    /* The startup code into "FLASH" Rom type memory */
-    .isr_vector :
-    { 
-        . = ALIGN(4);
-        KEEP(*(.isr_vector)) /* Startup code */
-        . = ALIGN(4);
-    } >FLASH
+  .isr_vector :
+  {
+    . = ALIGN(4);
+    KEEP(*(.isr_vector))
+    . = ALIGN(4);
+  } >FLASH
 
-    /* The program code and other data into "FLASH" Rom type memory */
-    .text :
-    {
-        . = ALIGN(4);
-        *(.text)           /* .text sections (code) */
-        *(.text*)          /* .text* sections (code) */
-        . = ALIGN(4);
-    } >FLASH
+  .text :
+  {
+    . = ALIGN(4);
+    *(.text)           /* .text sections (code) */
+    *(.text*)          /* .text* sections (code) */
+    . = ALIGN(4);
+    _etext = .;
+  } >FLASH
 
-    _la_data = LOADADDR(.data);
+  .rodata :
+  {
+    . = ALIGN(4);
+    *(.rodata)         /* .rodata sections (constants, strings, etc.) */
+    *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
+    . = ALIGN(4);
+  } >FLASH
 
-    .data :
-    {
-        _sdata = .;
-        *(.data)
-        *(.data.*)
-        . = ALIGN(4);
-        _edata = .;
-    }> SRAM AT> FLASH
 
-    .bss :
-    {
-        _sbss = .;
-        *(.bss SORT(.bss.*) COMMON)
-        . = ALIGN(4);
-        _ebss = .;
-        
-        . = ALIGN(4);
-        _end = .;
-    }> SRAM
+  /* load memory address for .data section*/
+  _la_data = LOADADDR(.data);
+
+  .data :
+  {
+    . = ALIGN(4);
+    _sdata = .;        /* create a global symbol at data start */
+    *(.data)           /* .data sections */
+    *(.data*)          /* .data* sections */
+
+    . = ALIGN(4);
+    _edata = .;        /* define a global symbol at data end */
+
+  } >RAM AT> FLASH
+
+  . = ALIGN(4);
+  .bss :
+  {
+    _sbss = .;         /* define a global symbol at bss start */
+    *(.bss)
+    *(.bss*)
+    *(COMMON)
+
+    . = ALIGN(4);
+    _ebss = .;         /* define a global symbol at bss end */
+  } >RAM
+
+  /* Remove information from the compiler libraries */
+  /DISCARD/ :
+  {
+    libc.a ( * )
+    libm.a ( * )
+    libgcc.a ( * )
+  }
+
 }
