@@ -11,19 +11,7 @@ __attribute__((weak)) void SysTick_Handler(void);
 void (*vectors[16 + 52])(void) __attribute__((section(".isr_vector"))) = {
     _estack,
     Reset_Handler,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     SysTick_Handler 
 };
 

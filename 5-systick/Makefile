@@ -1,4 +1,4 @@
-TARGET = blink
+TARGET = systick
 
 LDSCRIPT 	= stm32f4.ld
 
@@ -15,14 +15,13 @@ BUILD_DIR   = build
 INC_DIRS	= include
 DEFS 		= -DSTM32F401xE
 
-MCU_FLAGS 	= -mcpu=cortex-m4 -mfloat-abi=soft -mthumb
+MCU_FLAGS 	= -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -g -gdwarf-2
 LDFLAGS     = $(MCU_FLAGS) -nostdlib 
-CFLAGS      = $(MCU_FLAGS) -nostdlib -Os
+CFLAGS      = $(MCU_FLAGS) -nostdlib
 CPPFLAGS 	= $(addprefix -I,$(INC_DIRS)) $(DEFS)
 
 SRCS        = $(shell find $(SRC_DIRS) -name '*.c')
 OBJS        = $(SRCS:%.c=$(BUILD_DIR)/%.o) 
-
 
 all : bin size
 elf : $(BUILD_DIR)/$(TARGET).elf
