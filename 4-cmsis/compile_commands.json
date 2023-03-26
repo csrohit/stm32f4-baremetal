@@ -1,0 +1,38 @@
+[
+ {
+  "directory": "/Users/csrohit/code/black-pill/baremetal/4-cmsis",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-DSTM32F401xE",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-nostdlib",
+   "-Os",
+   "-c",
+   "src/main.c",
+   "-o",
+   "build/src/main.o"
+  ],
+  "file": "src/main.c"
+ },
+ {
+  "directory": "/Users/csrohit/code/black-pill/baremetal/4-cmsis",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-DSTM32F401xE",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-nostdlib",
+   "-Os",
+   "-c",
+   "src/startup_stm32f4.c",
+   "-o",
+   "build/src/startup_stm32f4.o"
+  ],
+  "file": "src/startup_stm32f4.c"
+ }
+]
