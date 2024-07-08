@@ -52,6 +52,6 @@ int main(void)
 
             DelayMs(20);
         }
-        DelayMs(2000);
+        DelayMs(5000);
     }
 }
