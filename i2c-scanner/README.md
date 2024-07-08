@@ -124,4 +124,4 @@ This command flashes the binary image at address `0x8000000` as the _FLASH_ memo
 
 The I2C bus is scanned for available devices every 5 seconds. All the detected devices are listed using USART console.
 The LED connected to pin PC13 blinks at every iteration as sign-of-life.
-![List of devices detected by scanner](../docs/out.png)
+![List of devices detected by scanner](./docs/out.png)
