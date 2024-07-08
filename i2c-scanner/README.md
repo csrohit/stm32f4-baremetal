@@ -3,6 +3,7 @@
 - [STM32F4 Baremetal: Scan Connected I2C devices](#stm32f4-baremetal-scan-connected-i2c-devices)
   - [Tools Setup](#tools-setup)
   - [Project Structure](#project-structure)
+  - [Notes](#notes)
   - [Building](#building)
     - [Compilation](#compilation)
     - [Flashing](#flashing)
@@ -64,6 +65,13 @@ In this second step. we strip the startup code from the `main.c` file and create
 4. `Makefile`
    The make script for automating the build process and avoid typing the long compilation commands everytime. For more information on makefile visit [Makefile Tutorial](https://makefiletutorial.com)
 
+## Notes
+1. Calculation of CCR\
+    The CCR value to operate I2C1 in Fast Mode with SCL frequency of 400KHz is calculated as follows:
+    ![Calculation of CCR ](./docs/ccr_calculation.jpg)
+
+2. Calculation of TRIS\
+    The TRISE value for given value of CCR is calculated as follows:
 
 ## Building
 
