@@ -23,7 +23,7 @@ In this second step. we strip the startup code from the `main.c` file and create
 
 ## Tools Setup
 
-1. GNU toolchain
+1. GNU toolchain\
     `gcc-arm-none-eabi` ARM cross-platform toolchain is required to build applications for ARM MCUs.
     Toolchain can be installed by running following command:
 
@@ -35,10 +35,10 @@ In this second step. we strip the startup code from the `main.c` file and create
     brew install arm-none-eabi-gcc
    ```
 
-2. Make tools 
+2. Make tools \
     Make utility is required for configuring and building this project. You can install make on linux by running command:
 
-2. ST Link drivers
+2. ST Link drivers\
     STM32 Cube Programmer A GUI cum Command Line utility to program any STM32 micro-controller.
     This tool can be downloaded from https://www.st.com/en/development-tools/stm32cubeprog.html
 
