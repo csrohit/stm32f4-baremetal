@@ -38,6 +38,17 @@ In this second step. we strip the startup code from the `main.c` file and create
 2. Make tools \
     Make utility is required for configuring and building this project. You can install make on linux by running command:
 
+    ```bash
+    # for Debian-based Linux distros
+    sudo apt install build-essential
+
+    # for macOS 
+    xcode-select --install
+
+    # for macOS using brew formulae
+    brew install make
+    ```
+
 2. ST Link drivers\
     STM32 Cube Programmer A GUI cum Command Line utility to program any STM32 micro-controller.
     This tool can be downloaded from https://www.st.com/en/development-tools/stm32cubeprog.html
