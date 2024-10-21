@@ -1,0 +1,191 @@
+[
+ {
+  "directory": "/home/csrohit/code/stm32f4-baremetal/oled",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-DSTM32F401xC",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-g",
+   "-gdwarf-2",
+   "-c",
+   "src/i2c.c",
+   "-o",
+   "build/src/i2c.o"
+  ],
+  "file": "src/i2c.c"
+ },
+ {
+  "directory": "/home/csrohit/code/stm32f4-baremetal/oled",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-DSTM32F401xC",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-g",
+   "-gdwarf-2",
+   "-c",
+   "src/main.c",
+   "-o",
+   "build/src/main.o"
+  ],
+  "file": "src/main.c"
+ },
+ {
+  "directory": "/home/csrohit/code/stm32f4-baremetal/oled",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-DSTM32F401xC",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-g",
+   "-gdwarf-2",
+   "-c",
+   "src/startup_stm32f4.c",
+   "-o",
+   "build/src/startup_stm32f4.o"
+  ],
+  "file": "src/startup_stm32f4.c"
+ },
+ {
+  "directory": "/home/csrohit/code/stm32f4-baremetal/oled",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-DSTM32F401xC",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-g",
+   "-gdwarf-2",
+   "-c",
+   "src/oled.c",
+   "-o",
+   "build/src/oled.o"
+  ],
+  "file": "src/oled.c"
+ },
+ {
+  "directory": "/home/csrohit/code/stm32f4-baremetal/oled",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-DSTM32F401xC",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-g",
+   "-gdwarf-2",
+   "-c",
+   "src/syscalls.c",
+   "-o",
+   "build/src/syscalls.o"
+  ],
+  "file": "src/syscalls.c"
+ },
+ {
+  "directory": "/home/csrohit/code/stm32f4-baremetal/oled",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-DSTM32F401xC",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-g",
+   "-gdwarf-2",
+   "-c",
+   "src/usart.c",
+   "-o",
+   "build/src/usart.o"
+  ],
+  "file": "src/usart.c"
+ },
+ {
+  "directory": "/home/csrohit/code/stm32f4-baremetal/oled",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-DSTM32F401xC",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-g",
+   "-gdwarf-2",
+   "-c",
+   "src/timer.c",
+   "-o",
+   "build/src/timer.o"
+  ],
+  "file": "src/timer.c"
+ },
+ {
+  "directory": "/home/csrohit/code/stm32f4-baremetal/oled",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-DSTM32F401xC",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-g",
+   "-gdwarf-2",
+   "-c",
+   "src/fonts.c",
+   "-o",
+   "build/src/fonts.o"
+  ],
+  "file": "src/fonts.c"
+ },
+ {
+  "directory": "/home/csrohit/code/stm32f4-baremetal/oled",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-DSTM32F401xC",
+   "-Iinclude",
+   "-I/opt/arm-gnu-toolchain/arm-none-eabi/include",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-g",
+   "-gdwarf-2",
+   "-c",
+   "src/gpio.c",
+   "-o",
+   "build/src/gpio.o"
+  ],
+  "file": "src/gpio.c"
+ }
+]
