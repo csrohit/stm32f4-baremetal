@@ -35,7 +35,7 @@ __attribute__((weak)) void     DMA1Stream6_Handler(void) __attribute__((alias("D
 __attribute__((weak)) void     ADC1_Handler(void) __attribute__((alias("Default_Handler")));
 __attribute__((weak)) void     EXTI9_5_Handler(void) __attribute__((alias("Default_Handler")));
 __attribute__((weak)) void     TIM1_Break_TIM9_Handler(void) __attribute__((alias("Default_Handler")));
-__attribute__((weak)) void     TIM1_Update_TIM10_Handler(void) __attribute__((alias("Default_Handler")));
+__attribute__((weak)) void     TIM1_UP_TIM10_IRQHandler(void);
 
 /* Define the vector table */
 void (*vectors[16 + 52])(void) __attribute__((section(".isr_vector"))) = {
@@ -81,7 +81,7 @@ void (*vectors[16 + 52])(void) __attribute__((section(".isr_vector"))) = {
     0,                       /* Reserved                     */
     0,                       /* External Line[9:5]s          */
     TIM1_Break_TIM9_Handler,                       /* TIM1 Break and TIM9          */
-    0 /* TIM1 Break and TIM9          */
+    TIM1_UP_TIM10_IRQHandler /* TIM1 Break and TIM9          */
 };
 
 __attribute__((noreturn)) void Reset_Handler(void)
