@@ -12,15 +12,46 @@
  *  opensource.org/licenses/BSD-3-Clause
  */
 
-#include <stdio.h>
 
 #include "stm32f4xx.h"
 #include "gpio.h"
-#include "timer.h"
 
-const char *str = "I2C Scanner\r\n"; /**< Initial string */
-char        buffer[128];             /**< Buffer for storing msg */
+void Timer9_Init(void) {
+    // Enable clock for TIM1
+    RCC->APB2ENR |= RCC_APB2ENR_TIM9EN;
 
+    // Set prescaler value
+    // Timer clock = SystemCoreClock / (prescaler + 1)
+    // Assuming SystemCoreClock is 16 MHz, for 1 ms => 16 - 1 = 15
+    TIM9->PSC = 15; // Prescaler to get 1 MHz (1 µs tick)
+
+    // Set auto-reload register (ARR) for 1 ms
+    TIM9->ARR = 1000 - 1; // 1 ms
+
+    // Enable update interrupt
+    TIM9->DIER |= TIM_DIER_UIE;
+
+    // Enable timer
+    TIM9->CR1 |= TIM_CR1_CEN;
+
+    // Enable NVIC for TIM1 update interrupt
+    NVIC_EnableIRQ(TIM1_BRK_TIM9_IRQn);
+}
+
+void TIM1_Break_TIM9_Handler(void) {
+    // Check if update interrupt flag is set
+    if (TIM9->SR & TIM_SR_UIF) {
+        TIM9->SR &= ~TIM_SR_UIF; // Clear the interrupt flag
+    }
+}
+
+void delay_ms(uint32_t ms) {
+    for (uint32_t i = 0; i < ms; i++) {
+        // Wait for the update interrupt
+        while (!(TIM9->SR & TIM_SR_UIF));
+        TIM9->SR &= ~TIM_SR_UIF; // Clear the interrupt flag
+    }
+}
 int main(void)
 {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
@@ -28,13 +59,14 @@ int main(void)
     GPIOC->MODER &= ~GPIO_MODER_MODER13;
 
     GPIOC->MODER |= GPIO_MODER_MODER13_0;
-
+    
+    Timer9_Init(); 
 
     SysTick_Config(16000);
 
     while (1)
     {
         GPIOToggle(GPIOC, GPIO_ODR_OD13);
-        DelayMs(500);
+        delay_ms(500);
     }
 }
