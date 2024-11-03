@@ -112,12 +112,6 @@ void Default_Handler(void)
 {
     while (1)
     {
-        TIM1_Break_TIM9_Handler();
-
-        uint32_t delay = 1000000;
-        while (delay--)
-        {
             __asm("nop");
-        }
     };
 }
