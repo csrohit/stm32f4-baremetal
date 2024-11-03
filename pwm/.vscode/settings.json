@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "i2c.h": "c",
+        "stm32f4xx.h": "c",
+        "stdint.h": "c",
+        "stm32f401xc.h": "c",
+        "cmsis_gcc.h": "c",
+        "stdio.h": "c"
+    }
+}

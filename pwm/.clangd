@@ -1,0 +1,6 @@
+CompileFlags: # Tweak the parse settings, example directory given to show format
+  Add:
+    - "-I /usr/localfolder"   
+    - -I /opt/arm-gnu-toolchain/arm-none-eabi/include
+Index:
+    Background: Skip
