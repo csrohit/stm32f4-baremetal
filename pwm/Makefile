@@ -45,5 +45,11 @@ $(BUILD_DIR)/%.o: %.c
 flash: bin
 	STM32_Programmer_CLI -c port=SWD ap=0 -w $(BUILD_DIR)/$(TARGET).elf -rst
 
+erase:
+	STM32_Programmer_CLI -c port=SWD ap=0 -e all
+
+reset:
+	STM32_Programmer_CLI -c port=SWD ap=0  -rst
+
 clean:
 	rm -rf $(BUILD_DIR)

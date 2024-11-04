@@ -35,54 +35,57 @@ __attribute__((weak)) void     DMA1Stream6_Handler(void) __attribute__((alias("D
 __attribute__((weak)) void     ADC1_Handler(void) __attribute__((alias("Default_Handler")));
 __attribute__((weak)) void     EXTI9_5_Handler(void) __attribute__((alias("Default_Handler")));
 __attribute__((weak)) void     TIM1_Break_TIM9_Handler(void) __attribute__((alias("Default_Handler")));
-__attribute__((weak)) void     TIM1_Update_TIM10_Handler(void) __attribute__((alias("Default_Handler")));
+__attribute__((weak)) void     TIM1_UP_TIM10_IRQHandler(void) __attribute__((alias("Default_Handler")));
+__attribute__((weak)) void     TIM3_IRQHandler(void);
 
 /* Define the vector table */
-void (*vectors[16 + 52])(void) __attribute__((section(".isr_vector"))) = {
-    _estack,            /* Stack Top */
-    Reset_Handler,      /* Reset Handler */
-    NMI_Handler,        /* NMI Handler */
-    HardFault_Handler,  /* HardFault Handler */
-    MemManage_Handler,  /* Mem Manage fault handler */
-    BusFault_Handler,   /* Bus Fault Handler */
-    UsageFault_Handler, /* UsageFault Handler*/
-    0,                  /* Reserved */
-    0,                  /* Reserved */
-    0,                  /* Reserved */
-    0,                  /* Reserved */
-    SVCall_Handler,     /* SVCall Handler */
-    DebugMon_Handler,   /* Debug Monitor Handler */
-    0,                  /* Reserved */
-    PendSV_Handler,     /* Pend SV Handler */
-    SysTick_Handler,    /* SysTick handler */
+void (*vectors[16 + 52])(void) __attribute__((section(".isr_vector"))) = {_estack,            /* Stack Top */
+                                                                          Reset_Handler,      /* Reset Handler */
+                                                                          NMI_Handler,        /* NMI Handler */
+                                                                          HardFault_Handler,  /* HardFault Handler */
+                                                                          MemManage_Handler,  /* Mem Manage fault handler */
+                                                                          BusFault_Handler,   /* Bus Fault Handler */
+                                                                          UsageFault_Handler, /* UsageFault Handler*/
+                                                                          0,                  /* Reserved */
+                                                                          0,                  /* Reserved */
+                                                                          0,                  /* Reserved */
+                                                                          0,                  /* Reserved */
+                                                                          SVCall_Handler,     /* SVCall Handler */
+                                                                          DebugMon_Handler,   /* Debug Monitor Handler */
+                                                                          0,                  /* Reserved */
+                                                                          PendSV_Handler,     /* Pend SV Handler */
+                                                                          SysTick_Handler,    /* SysTick handler */
 
-    0,                       /* Window WatchDog              */
-    0,                       /* PVD through EXTI Line detection */
-    0,                       /* Tamper and TimeStamps through the EXTI line */
-    0,                       /* RTC Wakeup through the EXTI line */
-    0,                       /* FLASH                        */
-    0,                       /* RCC                          */
-    EXTI0_IRQHandler,        /* EXTI Line0                   */
-    0,                       /* EXTI Line1                   */
-    0,                       /* EXTI Line2                   */
-    0,                       /* EXTI Line3                   */
-    0,                       /* EXTI Line4                   */
-    0,                       /* DMA1 Stream 0                */
-    0,                       /* DMA1 Stream 1                */
-    0,                       /* DMA1 Stream 2                */
-    0,                       /* DMA1 Stream 3                */
-    0,                       /* DMA1 Stream 4                */
-    0,                       /* DMA1 Stream 5                */
-    0,                       /* DMA1 Stream 6                */
-    0,                       /* ADC1                         */
-    0,                       /* Reserved                     */
-    0,                       /* Reserved                     */
-    0,                       /* Reserved                     */
-    0,                       /* Reserved                     */
-    0,                       /* External Line[9:5]s          */
-    TIM1_Break_TIM9_Handler,                       /* TIM1 Break and TIM9          */
-    0 /* TIM1 Break and TIM9          */
-};
+                                                                          0,                        /* Window WatchDog              */
+                                                                          0,                        /* PVD through EXTI Line detection */
+                                                                          0,                        /* Tamper and TimeStamps through the EXTI line */
+                                                                          0,                        /* RTC Wakeup through the EXTI line */
+                                                                          0,                        /* FLASH                        */
+                                                                          0,                        /* RCC                          */
+                                                                          EXTI0_IRQHandler,         /* EXTI Line0                   */
+                                                                          0,                        /* EXTI Line1                   */
+                                                                          0,                        /* EXTI Line2                   */
+                                                                          0,                        /* EXTI Line3                   */
+                                                                          0,                        /* EXTI Line4                   */
+                                                                          0,                        /* DMA1 Stream 0                */
+                                                                          0,                        /* DMA1 Stream 1                */
+                                                                          0,                        /* DMA1 Stream 2                */
+                                                                          0,                        /* DMA1 Stream 3                */
+                                                                          0,                        /* DMA1 Stream 4                */
+                                                                          0,                        /* DMA1 Stream 5                */
+                                                                          0,                        /* DMA1 Stream 6                */
+                                                                          0,                        /* ADC1                         */
+                                                                          0,                        /* Reserved                     */
+                                                                          0,                        /* Reserved                     */
+                                                                          0,                        /* Reserved                     */
+                                                                          0,                        /* Reserved                     */
+                                                                          0,                        /* External Line[9:5]s          */
+                                                                          TIM1_Break_TIM9_Handler,  /* TIM1 Break and TIM9          */
+                                                                          TIM1_UP_TIM10_IRQHandler, /* TIM1 Update and TIM10        */
+                                                                          0,                        /* TIM1 Trigger and TIM11       */
+                                                                          0,                        /* TIM1 Capture Compare         */
+                                                                          0,
+                                                                          TIM3_IRQHandler /* TIM3 */};
 
 __attribute__((noreturn)) void Reset_Handler(void)
 {

@@ -12,46 +12,111 @@
  *  opensource.org/licenses/BSD-3-Clause
  */
 
-
 #include "stm32f4xx.h"
 #include "gpio.h"
 
-void Timer9_Init(void) {
-    // Enable clock for TIM1
-    RCC->APB2ENR |= RCC_APB2ENR_TIM9EN;
+volatile int flag = 0;
+volatile uint32_t msTicks = 0U;
 
-    // Set prescaler value
-    // Timer clock = SystemCoreClock / (prescaler + 1)
-    // Assuming SystemCoreClock is 16 MHz, for 1 ms => 16 - 1 = 15
-    TIM9->PSC = 15; // Prescaler to get 1 MHz (1 µs tick)
+/**
+ * @brief Interrupt handler function
+ *
+ */
+void SysTick_Handler(void)
+{
+	msTicks++;
+}
+
+/**
+ * @brief Add blocking delay
+ *
+ * @param ms delay in milliseconds
+ */
+void ms_delay(uint32_t ms)
+{
+	uint32_t expected_ticks = msTicks + ms;
+	while (msTicks < expected_ticks)
+	{
+		__asm("nop");
+	}
+}
+void Timer1_Init(void)
+{
+    /* Enable Clock for GPIOA and GPIOB */
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN;
+
+    /* Set PA6, PA7 to alternate function */
+    GPIOA->MODER &= ~(GPIO_MODER_MODE6 | GPIO_MODER_MODE7);
+    GPIOA->MODER |= GPIO_MODER_MODE6_1 | GPIO_MODER_MODE7_1;
+
+    /* Set PB0, PB1 to alternate function */
+    GPIOB->MODER &= ~(GPIO_MODER_MODE0 | GPIO_MODER_MODE1);
+    GPIOB->MODER |= GPIO_MODER_MODE0_1 | GPIO_MODER_MODE1_1;
+
+    /* Set PA6, PA7 to Push-Pull (Default) */
+    GPIOA->OTYPER &= ~(GPIO_OTYPER_OT6 | GPIO_OTYPER_OT7);
+
+    /* Set PB0, PB1 to Push-Pull (Default) */
+    GPIOA->OTYPER &= ~(GPIO_OTYPER_OT6 | GPIO_OTYPER_OT7);
+
+    /* Set PA6, PA7 to AF2 */
+    GPIOA->AFR[0] &= ~(GPIO_AFRL_AFRL6 | GPIO_AFRL_AFRL7);
+    GPIOA->AFR[0] |= GPIO_AFRL_AFRL6_1 | GPIO_AFRL_AFRL7_1;
+
+    /* Set PB0, PB1 to AF2 */
+    GPIOB->AFR[0] &= ~(GPIO_AFRL_AFRL0 | GPIO_AFRL_AFRL1);
+    GPIOB->AFR[0] |= GPIO_AFRL_AFRL0_1 | GPIO_AFRL_AFRL1_1;
+
+    /*---- Enable clock for TIM3 ----*/
+    RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
+
+    /*----
+        Set prescaler value
+        Timer clock = SystemCoreClock / (prescaler + 1)
+        Assuming SystemCoreClock is 16 MHz, for 1 ms => 16 - 1 = 15
+    ----*/
+    TIM3->PSC = 15; // Prescaler to get 1 MHz (1 µs tick)
 
     // Set auto-reload register (ARR) for 1 ms
-    TIM9->ARR = 1000 - 1; // 1 ms
+    TIM3->ARR = 1000 - 1; // 1 ms
 
-    // Enable update interrupt
-    TIM9->DIER |= TIM_DIER_UIE;
-
-    // Enable timer
-    TIM9->CR1 |= TIM_CR1_CEN;
+    /* Enable update interrupt */
+    TIM3->DIER |= TIM_DIER_UIE;
 
     // Enable NVIC for TIM1 update interrupt
-    NVIC_EnableIRQ(TIM1_BRK_TIM9_IRQn);
+    NVIC_EnableIRQ(TIM3_IRQn);
+
+    /* Write compare values */
+    TIM3->CCR1 = 200 - 1;
+    TIM3->CCR2 = 400 - 1;
+    TIM3->CCR3 = 600 - 1;
+    TIM3->CCR4 = 800 - 1;
+
+    /* Toggle CH1 and CH2 on Match */
+    TIM3->CCMR1 &= ~TIM_CCMR1_OC1M;
+    TIM3->CCMR1 |= TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_2;
+
+    /* Enable TIM3 CHannel 1, 2, 3, 4 */
+    TIM3->CCMR1 |= TIM_CCMR1_OC1PE;
+    TIM3->CCMR1 &= ~(TIM_CCMR1_CC1S);
+
+    TIM3->CCER |= TIM_CCER_CC1E;
+
+    /* Enable timer */
+    TIM3->CR1 |= TIM_CR1_CEN;
 }
 
-void TIM1_Break_TIM9_Handler(void) {
+void TIM3_IRQHandler(void)
+{
     // Check if update interrupt flag is set
-    if (TIM9->SR & TIM_SR_UIF) {
-        TIM9->SR &= ~TIM_SR_UIF; // Clear the interrupt flag
+    if (TIM3->SR & TIM_SR_UIF)
+    {
+        TIM3->SR &= ~TIM_SR_UIF; // Clear the interrupt flag
+        flag = 1;
     }
 }
 
-void delay_ms(uint32_t ms) {
-    for (uint32_t i = 0; i < ms; i++) {
-        // Wait for the update interrupt
-        while (!(TIM9->SR & TIM_SR_UIF));
-        TIM9->SR &= ~TIM_SR_UIF; // Clear the interrupt flag
-    }
-}
+
 int main(void)
 {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
@@ -59,14 +124,30 @@ int main(void)
     GPIOC->MODER &= ~GPIO_MODER_MODER13;
 
     GPIOC->MODER |= GPIO_MODER_MODER13_0;
-    
-    Timer9_Init(); 
+
+    Timer1_Init();
 
     SysTick_Config(16000);
 
+    uint32_t duty = 0;
+
     while (1)
     {
-        GPIOToggle(GPIOC, GPIO_ODR_OD13);
-        delay_ms(500);
+        while (duty < 1000)
+        {
+            TIM3->CCR1 = duty;
+            duty = duty + 5;
+            duty++;
+            ms_delay(10);
+        }
+
+        while (duty > 0)
+        {
+            TIM3->CCR1 = duty;
+            duty = duty - 5;;
+            duty--;
+            ms_delay(10);
+            // delay_ms(500);
+        }
     }
 }
