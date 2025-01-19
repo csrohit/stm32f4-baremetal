@@ -55,7 +55,7 @@ void Timer1_Init(void)
     TIM3->PSC = 15999; // Prescaler to get 1 MHz (1 µs tick)
 
     // Set auto-reload register (ARR) for 1 ms
-    TIM3->ARR = 1000 - 1; // 1 ms
+    TIM3->ARR = 500 - 1; // 1 ms
 
     /* Enable update interrupt */
     TIM3->DIER |= TIM_DIER_UIE;
@@ -64,10 +64,10 @@ void Timer1_Init(void)
     NVIC_EnableIRQ(TIM3_IRQn);
 
     /* Write compare values */
-    TIM3->CCR1 = 200 - 1;
-    TIM3->CCR2 = 400 - 1;
-    TIM3->CCR3 = 600 - 1;
-    TIM3->CCR4 = 800 - 1;
+    TIM3->CCR1 = 100 - 1;
+    TIM3->CCR2 = 200 - 1;
+    TIM3->CCR3 = 300 - 1;
+    TIM3->CCR4 = 400 - 1;
 
     /* Toggle CH1 and CH2 on Match */
     TIM3->CCMR1 &= ~(TIM_CCMR1_OC1M | TIM_CCMR1_OC2M);
