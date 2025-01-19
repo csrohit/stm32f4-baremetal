@@ -1,6 +1,6 @@
 [
  {
-  "directory": "/Users/csrohit/code/black-pill/baremetal/6-usart",
+  "directory": "/home/csrohit/code/stm32f4-baremetal/6-usart",
   "arguments": [
    "arm-none-eabi-gcc",
    "-Iinclude",
@@ -19,26 +19,7 @@
   "file": "src/main.c"
  },
  {
-  "directory": "/Users/csrohit/code/black-pill/baremetal/6-usart",
-  "arguments": [
-   "arm-none-eabi-gcc",
-   "-Iinclude",
-   "-DSTM32F401xC",
-   "-mcpu=cortex-m4",
-   "-mfloat-abi=soft",
-   "-mthumb",
-   "-g",
-   "-gdwarf-2",
-   "-nostdlib",
-   "-c",
-   "src/usart.c",
-   "-o",
-   "build/src/usart.o"
-  ],
-  "file": "src/usart.c"
- },
- {
-  "directory": "/Users/csrohit/code/black-pill/baremetal/6-usart",
+  "directory": "/home/csrohit/code/stm32f4-baremetal/6-usart",
   "arguments": [
    "arm-none-eabi-gcc",
    "-Iinclude",
@@ -55,5 +36,24 @@
    "build/src/startup_stm32f4.o"
   ],
   "file": "src/startup_stm32f4.c"
+ },
+ {
+  "directory": "/home/csrohit/code/stm32f4-baremetal/6-usart",
+  "arguments": [
+   "arm-none-eabi-gcc",
+   "-Iinclude",
+   "-DSTM32F401xC",
+   "-mcpu=cortex-m4",
+   "-mfloat-abi=soft",
+   "-mthumb",
+   "-g",
+   "-gdwarf-2",
+   "-nostdlib",
+   "-c",
+   "src/usart.c",
+   "-o",
+   "build/src/usart.o"
+  ],
+  "file": "src/usart.c"
  }
 ]
