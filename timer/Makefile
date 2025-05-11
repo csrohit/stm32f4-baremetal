@@ -1,4 +1,4 @@
-TARGET = i2c_scanner
+TARGET = timer
 
 LDSCRIPT    = stm32f4.ld
 
@@ -42,14 +42,17 @@ $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
-flash: bin
+flash_stlink: bin
+	st-flash --connect-under-reset write $(TARGET).bin 0x8000000
+
+flash: elf
 	STM32_Programmer_CLI -c port=SWD ap=0 -w $(BUILD_DIR)/$(TARGET).elf -rst
 
 erase:
 	STM32_Programmer_CLI -c port=SWD ap=0 -e all
 
 reset:
-	STM32_Programmer_CLI -c port=SWD ap=0  -rst
+	STM32_Programmer_CLI -c port=SWD ap=0 -rst
 
 clean:
 	rm -rf $(BUILD_DIR)
