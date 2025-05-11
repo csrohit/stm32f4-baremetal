@@ -15,4 +15,3 @@ IndentCaseLabels: true
 AllowShortFunctionsOnASingleLine: None
 SortIncludes: false
 ...
-
