@@ -13,7 +13,7 @@ void usart_init(uint32_t baud)
     GPIOA->AFR[1] &= ~(GPIO_AFRH_AFSEL9 | GPIO_AFRH_AFSEL10);
     GPIOA->AFR[1] |= GPIO_AFRH_AFSEL9_0 | GPIO_AFRH_AFSEL9_1 | GPIO_AFRH_AFSEL9_2 | GPIO_AFRH_AFSEL10_0 | GPIO_AFRH_AFSEL10_1 | GPIO_AFRH_AFSEL10_2;
 
-    USART1->BRR = 0x8b;
+    USART1->BRR = 16000000U/baud;
     USART1->CR1 |= USART_CR1_TE | USART_CR1_UE | USART_CR1_RE;
 }
 
@@ -32,4 +32,6 @@ void usart_txbuf(const char *ch)
         usart_txchar(*ch);
         ch++;
     }
+
+    __disable_irq();
 }
