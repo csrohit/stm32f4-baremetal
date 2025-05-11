@@ -17,8 +17,8 @@ DEFS        = -DSTM32F401xC
 
 MCU_FLAGS   = -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -g -gdwarf-2
 INCFLAGS    = $(addprefix -I,$(INC_DIRS))
-LDFLAGS     = $(MCU_FLAGS) $(INCFLAGS) -u _printf_float --specs=nano.specs -specs=nosys.specs -lc_nano
-CFLAGS      = $(INCFLAGS) $(MCU_FLAGS)
+LDFLAGS     = $(MCU_FLAGS) $(INCFLAGS) -nostdlib
+CFLAGS      = $(INCFLAGS) $(MCU_FLAGS) -nostdlib
 CPPFLAGS    = $(INCFLAGS) $(DEFS)
 
 SRCS        = $(shell find $(SRC_DIRS) -name '*.c')

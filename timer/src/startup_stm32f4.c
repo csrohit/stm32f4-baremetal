@@ -80,7 +80,7 @@ void (*vectors[16 + 52])(void) __attribute__((section(".isr_vector"))) = {
     0,                       /* Reserved                     */
     0,                       /* Reserved                     */
     0,                       /* External Line[9:5]s          */
-    TIM1_Break_TIM9_Handler,                       /* TIM1 Break and TIM9          */
+    TIM1_Break_TIM9_Handler, /* TIM1 Break and TIM9          */
     TIM1_UP_TIM10_IRQHandler /* TIM1 Break and TIM9          */
 };
 
