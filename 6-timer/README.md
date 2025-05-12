@@ -1,4 +1,8 @@
 
+# STM32F4 Baremetal: Use timer for generating delay
+
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+
 <!--toc:start-->
 - [STM32F4 Baremetal: Scan Connected I2C devices](#stm32f4-baremetal-scan-connected-i2c-devices)
   - [Tools Setup](#tools-setup)
@@ -10,9 +14,6 @@
   - [Output](#output)
 <!--toc:end-->
 
-# STM32F4 Baremetal: Scan Connected I2C devices
-[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
-
 This guide is meant for embedded developers who wish to get the know how of flow of embedded systems developement. This guide dives in detail about programming embedded sysetems using only the bare-minimum tools mentioned below
 
 1. arm-none-eabi-gcc - Cross Compiler for Arm Cortex M systems
@@ -20,13 +21,14 @@ This guide is meant for embedded developers who wish to get the know how of flow
 3. Text editor
 4. ST Link - Programmer to flash the binary on the board
 
-In this second step. we strip the startup code from the `main.c` file and create a separate startup script.
+## Description
+Please refer to the medium article for in depth explaination of the code <https://medium.com/@csrohit/getting-started-with-general-purpose-timer-stm32f401-6782adb95dde>
 
 ## Tools Setup
 
 1. GNU toolchain\
     `gcc-arm-none-eabi` ARM cross-platform toolchain is required to build applications for ARM MCUs.
-    Toolchain can be installed by running following command:
+    Toolchain can be installed using package manager by running following command:
 
    ```bash
     # for Debian-based Linux distros
@@ -35,6 +37,8 @@ In this second step. we strip the startup code from the `main.c` file and create
     # for macOS using brew formulae
     brew install arm-none-eabi-gcc
    ```
+
+   Download the latest version of the toolchain from Arm: <https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads>
 
 2. Make tools \
     Make utility is required for configuring and building this project. You can install make on linux by running command:
@@ -50,9 +54,9 @@ In this second step. we strip the startup code from the `main.c` file and create
     brew install make
     ```
 
-2. ST Link drivers\
+3. ST Link drivers\
     STM32 Cube Programmer A GUI cum Command Line utility to program any STM32 micro-controller.
-    This tool can be downloaded from https://www.st.com/en/development-tools/stm32cubeprog.html
+    This tool can be downloaded from <https://www.st.com/en/development-tools/stm32cubeprog.html>
 
 ## Project Structure
 
@@ -65,13 +69,6 @@ In this second step. we strip the startup code from the `main.c` file and create
 4. `Makefile`
    The make script for automating the build process and avoid typing the long compilation commands everytime. For more information on makefile visit [Makefile Tutorial](https://makefiletutorial.com)
 
-## Notes
-1. Calculation of CCR\
-    The CCR value to operate I2C1 in Fast Mode with SCL frequency of 400KHz is calculated as follows:
-    ![Calculation of CCR ](./docs/ccr_calculation.jpg)
-
-2. Calculation of TRIS\
-    The TRISE value for given value of CCR is calculated as follows:
 
 ## Building
 
@@ -93,54 +90,15 @@ In the final step we flash the generated binary image to the micro-controller.
 ```bash
 make flash
 ```
+
 following output is observed on the terminal while flashing.
+
 ```txt
 STM32_Programmer_CLI -c port=SWD ap=0 -w build/i2c_scanner.elf -rst
-      -------------------------------------------------------------------
-                        STM32CubeProgrammer v2.15.0                  
-      -------------------------------------------------------------------
-
-ST-LINK SN  : 370C0B002A135937334D4E00
-ST-LINK FW  : V2J45S7
-Board       : --
-Voltage     : 3.19V
-SWD freq    : 4000 KHz
-Connect mode: Normal
-Reset mode  : Software reset
-Device ID   : 0x423
-Revision ID : Rev Z
-Device name : STM32F401xB/C
-Flash size  : 256 KBytes
-Device type : MCU
-Device CPU  : Cortex-M4
-BL Version  : 0xD1
-
-
-
-Memory Programming ...
-Opening and parsing file: i2c_scanner.elf
-  File          : i2c_scanner.elf
-  Size          : 21.32 KB 
-  Address       : 0x08000000 
-
-
-Erasing memory corresponding to segment 0:
-Erasing internal memory sectors [0 1]
-Download in Progress:
-[==================================================] 100% 
-
-File download complete
-Time elapsed during download operation: 00:00:00.707
-
-MCU Reset
-
-Software reset is performed
 ```
 
 This command flashes the binary image at address `0x8000000` as the _FLASH_ memory starts from that address.
 
 ## Output
 
-The I2C bus is scanned for available devices every 5 seconds. All the detected devices are listed using USART console.
 The LED connected to pin PC13 blinks at every iteration as sign-of-life.
-![List of devices detected by scanner](./docs/out.png)
