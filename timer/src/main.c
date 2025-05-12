@@ -1,10 +1,10 @@
 /**
- * @file        main.c
+ * @file         main.c
  * @description Scan for connected I2C devices and log device address
  * @author      Rohit Nimkar
- * @version     1.0
- * @date        2024-07-07
- * @copyright   Copyright 2024 Rohit Nimkar
+ * @version     1.1
+ * @date        2025-05-12
+ * @copyright   Copyright 2025 Rohit Nimkar
  *
  * @attention
  *  Use of this source code is governed by a BSD-style
