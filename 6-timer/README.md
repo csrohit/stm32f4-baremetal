@@ -4,10 +4,10 @@
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 
 <!--toc:start-->
-- [STM32F4 Baremetal: Scan Connected I2C devices](#stm32f4-baremetal-scan-connected-i2c-devices)
+- [STM32F4 Baremetal: Use timer for generating delay](#stm32f4-baremetal-use-timer-for-generating-delay)
+  - [Description](#description)
   - [Tools Setup](#tools-setup)
   - [Project Structure](#project-structure)
-  - [Notes](#notes)
   - [Building](#building)
     - [Compilation](#compilation)
     - [Flashing](#flashing)
@@ -27,36 +27,36 @@ Please refer to the medium article for in depth explaination of the code <https:
 ## Tools Setup
 
 1. GNU toolchain\
-    `gcc-arm-none-eabi` ARM cross-platform toolchain is required to build applications for ARM MCUs.
-    Toolchain can be installed using package manager by running following command:
+   `gcc-arm-none-eabi` ARM cross-platform toolchain is required to build applications for ARM MCUs.
+   Toolchain can be installed using package manager by running following command:
 
    ```bash
-    # for Debian-based Linux distros
-    sudo apt install gcc-arm-none-eabi
+   # for Debian-based Linux distros
+   sudo apt install gcc-arm-none-eabi
 
-    # for macOS using brew formulae
-    brew install arm-none-eabi-gcc
+   # for macOS using brew formulae
+   brew install arm-none-eabi-gcc
    ```
 
    Download the latest version of the toolchain from Arm: <https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads>
 
 2. Make tools \
-    Make utility is required for configuring and building this project. You can install make on linux by running command:
+   Make utility is required for configuring and building this project. You can install make on linux by running command:
 
-    ```bash
-    # for Debian-based Linux distros
-    sudo apt install build-essential
+   ```bash
+   # for Debian-based Linux distros
+   sudo apt install build-essential
 
-    # for macOS 
-    xcode-select --install
+   # for macOS 
+   xcode-select --install
 
-    # for macOS using brew formulae
-    brew install make
-    ```
+   # for macOS using brew formulae
+   brew install make
+   ```
 
 3. ST Link drivers\
-    STM32 Cube Programmer A GUI cum Command Line utility to program any STM32 micro-controller.
-    This tool can be downloaded from <https://www.st.com/en/development-tools/stm32cubeprog.html>
+   STM32 Cube Programmer A GUI cum Command Line utility to program any STM32 micro-controller.
+   This tool can be downloaded from <https://www.st.com/en/development-tools/stm32cubeprog.html>
 
 ## Project Structure
 
