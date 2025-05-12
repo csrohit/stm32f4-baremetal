@@ -56,7 +56,10 @@ Please refer to the medium article for in depth explaination of the code <https:
 
 3. ST Link drivers\
    STM32 Cube Programmer A GUI cum Command Line utility to program any STM32 micro-controller.
-   This tool can be downloaded from <https://www.st.com/en/development-tools/stm32cubeprog.html>
+   This tool can be downloaded from <https://www.st.com/en/development-tools/stm32cubeprog.html>\
+   
+   Note: Make sure to add path to `STM32_Programmer_CLI` to `$PATH` environment variable.
+
 
 ## Project Structure
 
