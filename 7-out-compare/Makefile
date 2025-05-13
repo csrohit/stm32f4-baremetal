@@ -1,4 +1,4 @@
-TARGET = i2c_scanner
+TARGET = timer
 
 LDSCRIPT    = stm32f4.ld
 
@@ -17,8 +17,8 @@ DEFS        = -DSTM32F401xC
 
 MCU_FLAGS   = -mcpu=cortex-m4 -mfloat-abi=soft -mthumb -g -gdwarf-2
 INCFLAGS    = $(addprefix -I,$(INC_DIRS))
-LDFLAGS     = $(MCU_FLAGS) $(INCFLAGS) -u _printf_float --specs=nano.specs -specs=nosys.specs -lc_nano
-CFLAGS      = $(INCFLAGS) $(MCU_FLAGS)
+LDFLAGS     = $(MCU_FLAGS) $(INCFLAGS) -nostdlib
+CFLAGS      = $(INCFLAGS) $(MCU_FLAGS) -nostdlib
 CPPFLAGS    = $(INCFLAGS) $(DEFS)
 
 SRCS        = $(shell find $(SRC_DIRS) -name '*.c')
@@ -42,14 +42,17 @@ $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
-flash: bin
+flash_stlink: bin
+	st-flash --connect-under-reset write $(TARGET).bin 0x8000000
+
+flash: elf
 	STM32_Programmer_CLI -c port=SWD ap=0 -w $(BUILD_DIR)/$(TARGET).elf -rst
 
 erase:
 	STM32_Programmer_CLI -c port=SWD ap=0 -e all
 
 reset:
-	STM32_Programmer_CLI -c port=SWD ap=0  -rst
+	STM32_Programmer_CLI -c port=SWD ap=0 -rst
 
 clean:
 	rm -rf $(BUILD_DIR)
