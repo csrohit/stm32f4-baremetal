@@ -1,0 +1,258 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36" version="27.0.4">
+  <diagram name="STM32 Timer Initialization and Operation" id="rlaitNVp0zsJaHUtTAnX">
+    <mxGraphModel dx="450" dy="1407" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-28" value="Clock Source (APB2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d9ead3;strokeColor=#6aa84f;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="280" y="-60" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-29" value="Prescaler (PSC)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#b7b7b7;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="280" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-31" value="Increment Counter (CNT++)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cfe2f3;strokeColor=#3c78d8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="280" y="60" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-34" value="Status Register (UIF)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="280" y="640" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-35" value="Interrupt / DMA Request" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="280" y="695" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-36" style="endArrow=block;endFill=1;strokeColor=light-dark(#000000, #4a7f33);strokeWidth=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-28" target="G18rk7Luz_pyVMsb6K_6-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-37" style="endArrow=block;endFill=1;strokeColor=light-dark(#000000, #505050);strokeWidth=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-29" target="G18rk7Luz_pyVMsb6K_6-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-46" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-34" target="G18rk7Luz_pyVMsb6K_6-35">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="420" y="700" as="sourcePoint" />
+            <mxPoint x="470" y="650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-47" value="Reset Counter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="330" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-50" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.015;entryY=0.517;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-35" target="G18rk7Luz_pyVMsb6K_6-117">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="699.6600000000001" as="sourcePoint" />
+            <mxPoint x="560" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-51" value="" style="shape=message;html=1;outlineConnect=0;" vertex="1" parent="G18rk7Luz_pyVMsb6K_6-50">
+          <mxGeometry width="20" height="14" relative="1" as="geometry">
+            <mxPoint x="-10" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-66" value="Compare Logic CH1&#xa;[CNT == CCR1?]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="400" y="170" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-67" value="Compare Logic CH2&#xa;[CNT == CCR2?]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="400" y="280" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-68" value="Compare Logic CH3&#xa;[CNT == CCR3?]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="400" y="390" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-69" value="Compare Logic CH4&#xa;[CNT == CCR4?]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="400" y="500" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-70" value="CCR1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b7e1cd;" vertex="1" parent="1">
+          <mxGeometry x="430" y="120" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-71" value="CCR2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b7e1cd;" vertex="1" parent="1">
+          <mxGeometry x="430" y="230" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-72" value="CCR3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b7e1cd;" vertex="1" parent="1">
+          <mxGeometry x="430" y="340" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-73" value="CCR4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b7e1cd;" vertex="1" parent="1">
+          <mxGeometry x="430" y="450" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-74" value="Toggle Event" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;" vertex="1" parent="1">
+          <mxGeometry x="590" y="175" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-75" value="Toggle Event" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;" vertex="1" parent="1">
+          <mxGeometry x="590" y="285" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-76" value="Toggle Event" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;" vertex="1" parent="1">
+          <mxGeometry x="590" y="395" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-77" value="Toggle Event" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;" vertex="1" parent="1">
+          <mxGeometry x="590" y="505" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-78" value="Output Pin (PA6)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="710" y="175" width="100" height="27.5" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-79" value="Output Pin (PA7)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="710" y="285" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-80" value="Output Pin (PB0)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="710" y="395" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-81" value="Output Pin (PB1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="710" y="505" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-86" style="endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-70" target="G18rk7Luz_pyVMsb6K_6-66">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-87" style="endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-71" target="G18rk7Luz_pyVMsb6K_6-67">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-88" style="endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-72" target="G18rk7Luz_pyVMsb6K_6-68">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-89" style="endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-73" target="G18rk7Luz_pyVMsb6K_6-69">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-90" style="endArrow=block;endFill=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-66" target="G18rk7Luz_pyVMsb6K_6-74">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="680" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-91" style="endArrow=block;endFill=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-67" target="G18rk7Luz_pyVMsb6K_6-75">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-92" style="endArrow=block;endFill=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-68" target="G18rk7Luz_pyVMsb6K_6-76">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-93" style="endArrow=block;endFill=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-69" target="G18rk7Luz_pyVMsb6K_6-77">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-94" style="endArrow=block;endFill=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-74" target="G18rk7Luz_pyVMsb6K_6-78">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-95" style="endArrow=block;endFill=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-75" target="G18rk7Luz_pyVMsb6K_6-79">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-96" style="endArrow=block;endFill=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-76" target="G18rk7Luz_pyVMsb6K_6-80">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-97" style="endArrow=block;endFill=1;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-77" target="G18rk7Luz_pyVMsb6K_6-81">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-98" value="On each match: Output pin toggles (high/low)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="540" y="100" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-99" value="" style="curved=1;endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-31" target="G18rk7Luz_pyVMsb6K_6-66">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="120" as="sourcePoint" />
+            <mxPoint x="310" y="380" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="360" y="170" />
+              <mxPoint x="360" y="190" />
+              <mxPoint x="380" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-100" value="" style="curved=1;endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-31" target="G18rk7Luz_pyVMsb6K_6-67">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="120" as="sourcePoint" />
+            <mxPoint x="370" y="400" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="360" y="280" />
+              <mxPoint x="360" y="300" />
+              <mxPoint x="380" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-101" value="" style="curved=1;endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-31" target="G18rk7Luz_pyVMsb6K_6-68">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="270" as="sourcePoint" />
+            <mxPoint x="350" y="400" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="360" y="390" />
+              <mxPoint x="360" y="410" />
+              <mxPoint x="380" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-102" value="" style="curved=1;endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-31" target="G18rk7Luz_pyVMsb6K_6-69">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="110" as="sourcePoint" />
+            <mxPoint x="370" y="500" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="360" y="500" />
+              <mxPoint x="360" y="520" />
+              <mxPoint x="380" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-107" value="" style="curved=1;endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-119" target="G18rk7Luz_pyVMsb6K_6-31">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="320" y="599.9999999999998" as="sourcePoint" />
+            <mxPoint x="250" y="150" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="260" y="580" />
+              <mxPoint x="240" y="580" />
+              <mxPoint x="240" y="560" />
+              <mxPoint x="240" y="110" />
+              <mxPoint x="240" y="90" />
+              <mxPoint x="260" y="90" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-109" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="G18rk7Luz_pyVMsb6K_6-107">
+          <mxGeometry x="-0.8749" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-108" value="" style="curved=1;endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-35" target="G18rk7Luz_pyVMsb6K_6-47">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="750" as="sourcePoint" />
+            <mxPoint x="160" y="370" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="360" y="740" />
+              <mxPoint x="360" y="760" />
+              <mxPoint x="340" y="760" />
+              <mxPoint x="180" y="760" />
+              <mxPoint x="160" y="760" />
+              <mxPoint x="160" y="740" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-121" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="G18rk7Luz_pyVMsb6K_6-108">
+          <mxGeometry x="-0.5845" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-111" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-119" target="G18rk7Luz_pyVMsb6K_6-34">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="599.9999999999998" as="sourcePoint" />
+            <mxPoint x="220" y="640" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-113" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="G18rk7Luz_pyVMsb6K_6-111">
+          <mxGeometry x="-0.1355" relative="1" as="geometry">
+            <mxPoint y="3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-112" value="" style="curved=1;endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-47" target="G18rk7Luz_pyVMsb6K_6-31">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="130" y="170" as="sourcePoint" />
+            <mxPoint x="180" y="120" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="160" y="90" />
+              <mxPoint x="160" y="70" />
+              <mxPoint x="180" y="70" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-116" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="G18rk7Luz_pyVMsb6K_6-115" target="G18rk7Luz_pyVMsb6K_6-119">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="589.9999999999998" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-115" value="ARR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="450" y="565" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-117" value="Timer ISR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;" vertex="1" parent="1">
+          <mxGeometry x="560" y="705" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="G18rk7Luz_pyVMsb6K_6-119" value="Compare Logic&lt;br&gt;[CNT == ARR?]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="300" y="560" width="120" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
