@@ -1,7 +1,7 @@
 /**
- * @file     main.cpp
+ * @file     system.cpp
  * @author   Rohit Nimkar <https://csrohit.github.io>
- * @brief    LED blinking program for STM32F401
+ * @brief    Definitions of functions related to CMSIS and timing related peripherals
  * @version  1.0
  *
  * @copyright Copyright (c) 2025
@@ -12,24 +12,12 @@
  * License. You may obtain a copy of the License at: opensource.org/licenses/BSD-3-Clause
  */
 
-#include "stm32f4xx.h"
-#include <stdint.h>
-
-#include "gpio_port.h"
 #include "system.h"
 
-int main(void)
+uint32_t          Core::clock    = 16000000U;
+volatile uint32_t Core::ms_ticks = 0;
+
+void SysTick_Handler(void)
 {
-    GPIO& portc = *new (GPIO::PortC) GPIO;
-
-    portc.enableClock();
-    portc.setPinMode(GPIO::PIN_13, GPIO::PinMode::OUTPUT);
-
-    SysTick_Config(16000);
-
-    while (1)
-    {
-        portc.togglePin(GPIO::PIN_13);
-        delay_ms(100);
-    }
+    Core::ms_ticks = Core::ms_ticks + 1;
 }

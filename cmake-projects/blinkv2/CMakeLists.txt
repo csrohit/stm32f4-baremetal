@@ -49,6 +49,7 @@ add_executable(${CMAKE_PROJECT_NAME} ${SRC_FILES})
 include(mcu_options.cmake)
 
 add_subdirectory(lib/gpio)
+add_subdirectory(lib/system)
 
 #Definition
 target_compile_definitions(${CMAKE_PROJECT_NAME}
@@ -110,12 +111,14 @@ target_link_options(${CMAKE_PROJECT_NAME}
 target_link_libraries(${CMAKE_PROJECT_NAME}
     PUBLIC
     gpio
+    system
     mcu_options
 )
 
 # add target for flashing the micro-controller
 add_custom_target(flash
-    COMMAND st-flash write ${CMAKE_PROJECT_NAME}.bin 0x8000000
+    # COMMAND st-flash write ${CMAKE_PROJECT_NAME}.bin 0x8000000
+     COMMAND STM32_Programmer_CLI -c port=SWD ap=0 -w ${CMAKE_PROJECT_NAME}.elf -rst
 )
 
 add_dependencies(flash ${CMAKE_PROJECT_NAME})
