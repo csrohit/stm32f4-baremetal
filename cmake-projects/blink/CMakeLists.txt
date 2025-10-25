@@ -100,7 +100,6 @@ target_compile_options(${CMAKE_PROJECT_NAME}
         # -Wsuggest-override
 )
 
-
 # add flags for linker
 target_link_options(${CMAKE_PROJECT_NAME} 
     PRIVATE
@@ -121,6 +120,17 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_SIZE} $<TARGET_FILE:${CMAKE_PROJECT_NAME}>
     COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.hex
     COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.bin
+)
+
+add_custom_command(
+    OUTPUT ${CMAKE_SOURCE_DIR}/compile_commands.json
+    COMMAND ${CMAKE_COMMAND} -E ln -sf ${CMAKE_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}/compile_commands.json
+    DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
+)
+
+add_custom_target(
+    symlink-compile-commands ALL
+    DEPENDS ${CMAKE_SOURCE_DIR}/compile_commands.json
 )
 
 function(dump_cmake_variables)
