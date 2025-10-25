@@ -13,8 +13,8 @@ OBJCOPY     =   ${TRIPLE}-objcopy
 
 
 
-INC_DIRS    := include
-SRC_DIRS    := src
+INC_DIRS    := include lib/gpio lib/system
+SRC_DIRS    := src lib
 BUILD_DIR   := build
 
 SRCS        := $(shell find $(SRC_DIRS) -name '*.cpp')
