@@ -53,6 +53,30 @@ class GPIO : private GPIO_TypeDef
     };
 
     /**
+     * @brief GPIO alternate function
+     */
+    enum AlternateFn : uint16_t
+    {
+        AF_0   = (uint16_t)0x0000, /* GPIO pin 0 */
+        AF_1   = (uint16_t)0x0001, /* GPIO pin 1 */
+        AF_2   = (uint16_t)0x0002, /* GPIO pin 2 */
+        AF_3   = (uint16_t)0x0003, /* GPIO pin 3 */
+        AF_4   = (uint16_t)0x0004, /* GPIO pin 4 */
+        AF_5   = (uint16_t)0x0005, /* GPIO pin 5 */
+        AF_6   = (uint16_t)0x0006, /* GPIO pin 6 */
+        AF_7   = (uint16_t)0x0007, /* GPIO pin 7 */
+        AF_8   = (uint16_t)0x0008, /* GPIO pin 8 */
+        AF_9   = (uint16_t)0x0009, /* GPIO pin 9 */
+        AF_10  = (uint16_t)0x000A, /* GPIO pin 10 */
+        AF_11  = (uint16_t)0x000B, /* GPIO pin 11 */
+        AF_12  = (uint16_t)0x000C, /* GPIO pin 12 */
+        AF_13  = (uint16_t)0x000D, /* GPIO pin 13 */
+        AF_14  = (uint16_t)0x000E, /* GPIO pin 14 */
+        AF_15  = (uint16_t)0x000F, /* GPIO pin 15 */
+        AF_ALL = (uint16_t)0xffff  /* Select all gpio pins */
+    };
+
+    /**
      * @brief GPIO logical pin state
      *
      */
@@ -68,6 +92,14 @@ class GPIO : private GPIO_TypeDef
         OUTPUT = 0x01, /* General Purpose Output */
         ALT    = 0x02, /* Alternate Function */
         ANALOG = 0x03  /* Analog mode */
+    };
+
+    enum PinSpeed
+    {
+        SPEED_LOW      = 0x00,
+        SPEED_MEDIUM   = 0x01, /* General Purpose Output */
+        SPEED_HIGH     = 0x02, /* Alternate Function */
+        SPEED_VERYHIGH = 0x03  /* Analog mode */
     };
 
   public:
@@ -131,6 +163,27 @@ class GPIO : private GPIO_TypeDef
         // clear previously set mode if any
         MODER &= ~((0x03U) << (pin << 1));
         MODER |= ((mode) << (pin << 1));
+    }
+
+    void setPinSpeed(PIN pin, PinSpeed speed)
+    {
+        // clear previously set speed if any
+        OSPEEDR &= ~((0x03U) << (pin << 1));
+        OSPEEDR |= ((speed) << (pin << 1));
+    }
+
+    void setAlternateFunction(PIN pin, AlternateFn altFn)
+    {
+        if (pin < PIN_8)
+        {
+            AFR[0] &= ~((0x0FU) << (pin << 2));
+            AFR[0] |= ((altFn) << (pin << 2));
+        }
+        else
+        {
+            AFR[1] &= ~((0x0FU) << ((pin - 8) << 2));
+            AFR[1] |= ((altFn) << ((pin - 8) << 2));
+        }
     }
 
     void togglePin(PIN pin)

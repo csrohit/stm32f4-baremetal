@@ -15,51 +15,32 @@
 #include "gpio_port.h"
 #include "stm32f4xx.h"
 #include "system.h"
+#include "usart.h"
 #include <stdint.h>
 
-void usart_init(uint32_t baud)
-{
-    RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
-
-    GPIOA->MODER &= ~(GPIO_MODER_MODER9 | GPIO_MODER_MODER10);
-    GPIOA->MODER |= GPIO_MODER_MODE9_1 | GPIO_MODER_MODER10_1;
-    GPIOA->OSPEEDR = 0U;
-
-    /* Set alternate functions: USART1 -> AF7 */
-    GPIOA->AFR[1] &= ~(GPIO_AFRH_AFSEL9 | GPIO_AFRH_AFSEL10);
-    GPIOA->AFR[1] |= GPIO_AFRH_AFSEL9_0 | GPIO_AFRH_AFSEL9_1 | GPIO_AFRH_AFSEL9_2 | GPIO_AFRH_AFSEL10_0 | GPIO_AFRH_AFSEL10_1 | GPIO_AFRH_AFSEL10_2;
-
-    USART1->BRR = 16000000U / baud;
-    USART1->CR1 |= USART_CR1_TE | USART_CR1_UE | USART_CR1_RE;
-}
-
-void usart_txchar(char c)
-{
-    // wait for tx data register to be empty
-    while (!(USART1->SR & USART_SR_TXE))
-        ;
-    USART1->DR = 0x000000ff & c;
-}
-
-void usart_txbuf(const char* ch)
-{
-    while (*ch)
-    {
-        usart_txchar(*ch);
-        ch++;
-    }
-}
-
-const char* str = "hello\r\n";
+const char* str = "Hello From Rohit\r\n";
 
 int main(void)
 {
     GPIO& portC = *new (GPIO::Port::PortC) GPIO;
+    GPIO& portA = *new (GPIO::Port::PortA) GPIO;
 
     portC.setPinMode(GPIO::PIN_13, GPIO::PinMode::OUTPUT);
+    portA.setPinMode(GPIO::PIN_9, GPIO::ALT);
+    portA.setPinMode(GPIO::PIN_10, GPIO::ALT);
 
-    usart_init(115200U);
+    portA.setPinSpeed(GPIO::PIN_9, GPIO::SPEED_LOW);
+    portA.setPinSpeed(GPIO::PIN_10, GPIO::SPEED_LOW);
+
+    /* Set alternate functions: USART1 -> AF7 */
+    portA.setAlternateFunction(GPIO::PIN_9, GPIO::AF_7);
+    portA.setAlternateFunction(GPIO::PIN_10, GPIO::AF_7);
+
+    USART& ttl = *new (USART::Usart1) USART;
+    ttl.setBaudrate(USART::BR_115200);
+    ttl.setTransmitterState(USART::Enabled);
+    ttl.setReceiverState(USART::Enabled);
+    ttl.setUsartState(USART::Enabled);
 
     SysTick_Config(16000);
 
@@ -67,6 +48,6 @@ int main(void)
     {
         portC.togglePin(GPIO::PIN_13);
         delay_ms(1000);
-        usart_txbuf(str);
+        ttl.tx_str(str);
     }
 }

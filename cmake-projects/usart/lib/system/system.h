@@ -12,10 +12,9 @@
  * License. You may obtain a copy of the License at: opensource.org/licenses/BSD-3-Clause
  */
 
-#include <stdint.h>
+#pragma once
 
-#ifndef SYSTEM_H
-#define SYSTEM_H
+#include <stdint.h>
 
 namespace Core
 {
@@ -31,6 +30,4 @@ static inline void delay_ms(uint32_t ms)
         __asm("nop");
     }
 }
-
-#endif //  SYSTEM_H
 

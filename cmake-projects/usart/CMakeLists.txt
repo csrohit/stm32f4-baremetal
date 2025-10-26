@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 # Toolchain configuration
@@ -35,9 +35,7 @@ set(CMAKE_CXX_FLAGS "" CACHE STRING "" FORCE)
 set(CMAKE_CXX_LINK_FLAGS "" CACHE STRING "" FORCE)
 
 #Project Definition
-project(usart VERSION 0.1 LANGUAGES CXX)
-
-
+project(usart-demo VERSION 0.1 LANGUAGES CXX)
 
 # Collect all .cpp files inside src directory (non-recursive)
 file(GLOB SRC_FILES "src/*.cpp")
@@ -46,17 +44,15 @@ file(GLOB SRC_FILES "src/*.cpp")
 add_executable(${CMAKE_PROJECT_NAME} ${SRC_FILES})
 
 # include external cmake modules
-
 include(mcu_options.cmake)
 
 add_subdirectory(lib/gpio)
 add_subdirectory(lib/system)
+add_subdirectory(lib/usart)
 
 #Definition
 target_compile_definitions(${CMAKE_PROJECT_NAME}
     PRIVATE
-        # $<$<CONFIG:Debug>:-g -gdwarf-2 -O0>
-        $<$<NOT:$<CONFIG:Debug>>:-Os>
         ${MCU_FAMILY}
 )
 
@@ -69,6 +65,8 @@ target_include_directories(${CMAKE_PROJECT_NAME}
 # add flags for compiler
 target_compile_options(${CMAKE_PROJECT_NAME}
     PRIVATE
+        $<$<CONFIG:Debug>:-g -gdwarf-2 -O0>
+        $<$<NOT:$<CONFIG:Debug>>:-Os>
         -nostdlib
         # -Os
         -Wall
@@ -109,6 +107,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     PUBLIC
     gpio
     system
+    usart
     mcu_options
 )
 
