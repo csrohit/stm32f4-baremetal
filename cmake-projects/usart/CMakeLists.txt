@@ -49,13 +49,14 @@ add_executable(${CMAKE_PROJECT_NAME} ${SRC_FILES})
 
 include(mcu_options.cmake)
 
-# add_subdirectory(lib/gpio)
-# add_subdirectory(lib/system)
+add_subdirectory(lib/gpio)
+add_subdirectory(lib/system)
 
 #Definition
 target_compile_definitions(${CMAKE_PROJECT_NAME}
     PRIVATE
-        $<$<CONFIG:Debug>:DEBUG>
+        # $<$<CONFIG:Debug>:-g -gdwarf-2 -O0>
+        $<$<NOT:$<CONFIG:Debug>>:-Os>
         ${MCU_FAMILY}
 )
 
@@ -65,16 +66,11 @@ target_include_directories(${CMAKE_PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# Flags
-set(CMAKE_CXX_FLAGS_DEBUG
-    "-g -gdwarf-2"
-)
-
 # add flags for compiler
 target_compile_options(${CMAKE_PROJECT_NAME}
     PRIVATE
         -nostdlib
-        -Os
+        # -Os
         -Wall
         # -fno-tree-vectorize
         # -fno-tree-loop-distribute-patterns
@@ -98,7 +94,7 @@ target_compile_options(${CMAKE_PROJECT_NAME}
         # -Wuseless-cast
         # -Wsuggest-override
         -save-temps=obj
-        # -fverbose-asm
+        -fverbose-asm
 )
 
 # add flags for linker
@@ -111,8 +107,8 @@ target_link_options(${CMAKE_PROJECT_NAME}
 # link libraries with the executable
 target_link_libraries(${CMAKE_PROJECT_NAME}
     PUBLIC
-    # gpio
-    # system
+    gpio
+    system
     mcu_options
 )
 
