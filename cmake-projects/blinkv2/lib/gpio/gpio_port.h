@@ -11,16 +11,14 @@
  * the "License"; You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at: opensource.org/licenses/BSD-3-Clause
  */
+#pragma once
 
 #include <stddef.h>
 #include <stdint.h>
 
 #include "stm32f4xx.h"
 
-#ifndef __GPIO_H__
-#define __GPIO_H__
-
-class GPIO: private GPIO_TypeDef
+class GPIO : private GPIO_TypeDef
 {
   public:
     enum Port
@@ -66,24 +64,11 @@ class GPIO: private GPIO_TypeDef
 
     enum PinMode
     {
-        INPUT = 0x00,
-        OUTPUT, /* General Purpose Output */
-        ALT, /* Alternate Function */
-        ANALOG /* Analog mode */
+        INPUT  = 0x00,
+        OUTPUT = 0x01, /* General Purpose Output */
+        ALT    = 0x02, /* Alternate Function */
+        ANALOG = 0x03  /* Analog mode */
     };
-
-    enum PinConfig
-    {
-        INPUT_ANALOG,
-        INPUT_FLOATING,
-        INPUT_PULLUP_PULLDOWN,
-        RESERVED,
-        OUTPUT_PUSH_PULL  = 0x00,
-        OUTPUT_OPEN_DRAIN = 0x01,
-        ALT_PUSH_PULL     = 0x03,
-        ALT_OPEN_DRAIN    = 0x04
-    };
-
 
   public:
     /**
@@ -144,12 +129,8 @@ class GPIO: private GPIO_TypeDef
     void setPinMode(PIN pin, PinMode mode)
     {
         // clear previously set mode if any
-        MODER &= ~((0x03U) << (pin << 2));
-        MODER |= ((0x03U) << (pin << 2));
-    }
-
-    void setPinConfig(PIN pin, PinConfig config)
-    {
+        MODER &= ~((0x03U) << (pin << 1));
+        MODER |= ((mode) << (pin << 1));
     }
 
     void togglePin(PIN pin)
@@ -166,4 +147,3 @@ class GPIO: private GPIO_TypeDef
         this->disableClock();
     }
 };
-#endif /* __GPIO_H__ */
