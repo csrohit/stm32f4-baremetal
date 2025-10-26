@@ -56,7 +56,7 @@ int main(void) {
 
     while (1) {
         gpio_toggle(GPIOC, GPIO_ODR_OD13);
-        ms_delay(100);
+        ms_delay(1000);
     }
 }
 
