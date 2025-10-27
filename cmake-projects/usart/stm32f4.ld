@@ -2,7 +2,7 @@ PHDRS
 {
     text PT_LOAD FLAGS(5); /* RX: Read + Execute */
     data PT_LOAD FLAGS(6); /* RW: Read + Write */
-    bss PT_LOAD FLAGS(6);  /* RW: Read + Write */
+    bss  PT_LOAD FLAGS(6);  /* RW: Read + Write */
 }
 
 /* Entry Point */
@@ -15,7 +15,7 @@ _estack = ORIGIN(SRAM) + LENGTH(SRAM);
 MEMORY
 {
     FLASH(rx): ORIGIN = 0x08000000, LENGTH = 256K
-    SRAM(rw): ORIGIN = 0x20000000, LENGTH = 64K
+    SRAM(rw) : ORIGIN = 0x20000000, LENGTH = 64K
 }
 
 SECTIONS
@@ -44,15 +44,12 @@ SECTIONS
 
     .bss : {
         _sbss = .;
-        __bss_start__ = _sbss;
         *(.bss)
         *(.bss.*)
         *(COMMON)
         . = ALIGN(4);
         _ebss = .;
-        __bss_end__ = _ebss;
         . = ALIGN(4);
-        end = .;
-        __end__ = .;
+        _end = .;
     } > SRAM :bss
 }
