@@ -1,6 +1,6 @@
 /**
  * @file    gpio_pin.cpp
- * @author  Rohit Nimkar (nehalnimkar@gmail.com) <https://csrohit.github.io>
+ * @author  Rohit Nimkar <https://csrohit.github.io>
  * @brief   Implementation of functionality related to GPIO Pin
  * @version 1.0
  *

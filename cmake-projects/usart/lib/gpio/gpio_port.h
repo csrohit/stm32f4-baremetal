@@ -1,6 +1,6 @@
 /**
  * @file    gpio_port.h
- * @author  Rohit Nimkar (nehalnimkar@gmail.com) <https://csrohit.github.io>
+ * @author  Rohit Nimkar <https://csrohit.github.io>
  * @brief   Declaration of functionality related to GPIO Port
  * @version 1.0
  *

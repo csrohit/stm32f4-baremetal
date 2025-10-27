@@ -1,6 +1,6 @@
 /**
  * @file    usart.h
- * @author  Rohit Nimkar (nehalnimkar@gmail.com) <https://csrohit.github.io>
+ * @author  Rohit Nimkar <https://csrohit.github.io>
  * @brief   Declaration of functionality related to USART
  * @version 1.0
  *

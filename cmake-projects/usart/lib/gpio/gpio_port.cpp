@@ -1,6 +1,6 @@
  /**
  * @file    gpio_port.cpp
- * @author  Rohit Nimkar (nehalnimkar@gmail.com) <https://csrohit.github.io>
+ * @author  Rohit Nimkar <https://csrohit.github.io>
  * @brief   Implementation of functionality related to GPIO Port
  * @version 1.0
  *
