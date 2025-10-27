@@ -15,7 +15,6 @@ INTERFACE
     $<$<CONFIG:Debug>:-g -gdwarf-2 -O0>
     -mcpu=cortex-m4
     -mthumb
-    -Wall
 )
 
 # Add compile definitions (example: MCU family macro)
@@ -32,4 +31,6 @@ INTERFACE
 target_link_options(mcu_options
 INTERFACE
     -T ${MCU_LINKER_SCRIPT}
+    -mcpu=cortex-m4
+    -mthumb
 )

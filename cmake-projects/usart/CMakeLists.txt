@@ -67,7 +67,6 @@ target_compile_options(${CMAKE_PROJECT_NAME}
     PRIVATE
         $<$<CONFIG:Debug>:-g -gdwarf-2 -O0>
         $<$<NOT:$<CONFIG:Debug>>:-Os>
-        -nostdlib
         # -Os
         -Wall
         # -fno-tree-vectorize
@@ -98,7 +97,8 @@ target_compile_options(${CMAKE_PROJECT_NAME}
 # add flags for linker
 target_link_options(${CMAKE_PROJECT_NAME} 
     PRIVATE
-        -nostdlib
+        -specs=nano.specs
+        # -u _printf_float
         -Wl,-Map=${CMAKE_PROJECT_NAME}.map,--gc-sections,-cref,--print-memory-usage
 )
 
