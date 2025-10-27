@@ -1,4 +1,4 @@
-TARGET      := usart
+TARGET      := i2c-scanner
 
 # debug build?Release
 BUILD_TYPE  = Release
@@ -13,8 +13,8 @@ OBJCOPY     =   ${TRIPLE}-objcopy
 
 
 
-INC_DIRS    := include 
-SRC_DIRS    := src
+INC_DIRS    := include lib/usart lib/gpio lib/system
+SRC_DIRS    := src lib/usart lib/gpio lib/system
 BUILD_DIR   := build
 
 SRCS        := $(shell find $(SRC_DIRS) -name '*.cpp')
@@ -22,16 +22,16 @@ OBJS        := $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
 DEFS        := -DSTM32F401xE
 
 CPP_FLAGS 	:= $(addprefix -I,$(INC_DIRS)) $(DEFS)
-CPU_FLAGS   := -mcpu=cortex-m3 -mfloat-abi=soft -mthumb
-C_FLAGS     := -nostdlib -std=c++17 -Os -Wall -fno-tree-loop-distribute-patterns -fdata-sections -ffunction-sections
-LD_FLAGS    := -nostdlib -Wl,--gc-sections
+CPU_FLAGS   := -mcpu=cortex-m4 -mfloat-abi=soft -mthumb
+C_FLAGS     := -std=c++17 -Os -Wall -fdata-sections -ffunction-sections -fno-exceptions -fno-rtti --specs=nano.specs -fno-threadsafe-statics 
+LD_FLAGS    := $(CPU_FLAGS) --specs=nano.specs -Wl,--gc-sections
 
 ifeq ($(BUILD_TYPE), Debug)
-C_FLAGS 		+= -g -gdwarf-2
+C_FLAGS 	+= -g -gdwarf-2
 endif
 
 # Generate dependency information
-C_FLAGS      += -MMD -MP 
+C_FLAGS     += -MMD -MP 
 
 # binary file to flash on target
 all : bin
