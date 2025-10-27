@@ -17,15 +17,11 @@
 #include "system.h"
 #include "usart.h"
 #include <stdint.h>
+#include <stdio.h>
 
-const char* str = "Hello From Rohit\r\n";
-
-int main(void)
+void InitStdOut()
 {
-    GPIO& portC = *new (GPIO::Port::PortC) GPIO;
     GPIO& portA = *new (GPIO::Port::PortA) GPIO;
-
-    portC.setPinMode(GPIO::PIN_13, GPIO::PinMode::OUTPUT);
     portA.setPinMode(GPIO::PIN_9, GPIO::ALT);
     portA.setPinMode(GPIO::PIN_10, GPIO::ALT);
 
@@ -36,11 +32,21 @@ int main(void)
     portA.setAlternateFunction(GPIO::PIN_9, GPIO::AF_7);
     portA.setAlternateFunction(GPIO::PIN_10, GPIO::AF_7);
 
-    USART& ttl = *new (USART::Usart1) USART;
-    ttl.setBaudrate(USART::BR_115200);
-    ttl.setTransmitterState(USART::Enabled);
-    ttl.setReceiverState(USART::Enabled);
-    ttl.setUsartState(USART::Enabled);
+    USART& out = *new (USART::Usart1) USART;
+    out.setBaudrate(USART::BR_115200);
+    out.setTransmitterState(USART::Enabled);
+    out.setReceiverState(USART::Enabled);
+    out.setUsartState(USART::Enabled);
+}
+
+int main(void)
+{
+    /* Required for Printf to work */
+    InitStdOut();
+
+    GPIO& portC = *new (GPIO::Port::PortC) GPIO;
+
+    portC.setPinMode(GPIO::PIN_13, GPIO::PinMode::OUTPUT);
 
     SysTick_Config(16000);
 
@@ -48,6 +54,6 @@ int main(void)
     {
         portC.togglePin(GPIO::PIN_13);
         delay_ms(1000);
-        ttl.tx_str(str);
+        printf("Hello World\r\n");
     }
 }
