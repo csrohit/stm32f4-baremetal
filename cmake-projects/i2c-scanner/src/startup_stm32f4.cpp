@@ -17,7 +17,7 @@
 
 #include <stdint.h>
 
-extern "C" void (*_estack)(void);
+extern "C" void _estack(void);
 
 extern uint32_t _etext;
 extern uint32_t _sdata;

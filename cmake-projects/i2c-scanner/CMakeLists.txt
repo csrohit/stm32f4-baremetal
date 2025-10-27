@@ -35,8 +35,7 @@ set(CMAKE_CXX_FLAGS "" CACHE STRING "" FORCE)
 set(CMAKE_CXX_LINK_FLAGS "" CACHE STRING "" FORCE)
 
 #Project Definition
-project(i2c-scanner VERSION 0.1 LANGUAGES CXX)
-
+project(i2c-demo VERSION 0.1 LANGUAGES CXX)
 
 # Collect all .cpp files inside src directory (non-recursive)
 file(GLOB SRC_FILES "src/*.cpp")
@@ -45,16 +44,16 @@ file(GLOB SRC_FILES "src/*.cpp")
 add_executable(${CMAKE_PROJECT_NAME} ${SRC_FILES})
 
 # include external cmake modules
-
 include(mcu_options.cmake)
 
 add_subdirectory(lib/gpio)
 add_subdirectory(lib/system)
+add_subdirectory(lib/usart)
+add_subdirectory(lib/i2c)
 
 #Definition
 target_compile_definitions(${CMAKE_PROJECT_NAME}
     PRIVATE
-        $<$<CONFIG:Debug>:DEBUG>
         ${MCU_FAMILY}
 )
 
@@ -64,17 +63,13 @@ target_include_directories(${CMAKE_PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# Flags
-set(CMAKE_CXX_FLAGS_DEBUG
-    "-g -gdwarf-2"
-)
-
 # add flags for compiler
 target_compile_options(${CMAKE_PROJECT_NAME}
     PRIVATE
-        -nostdlib
-        -Os
+        $<$<CONFIG:Debug>:-g -gdwarf-2 -O0>
+        $<$<NOT:$<CONFIG:Debug>>:-Os>
         -Wall
+        # -fno-tree-vectorize
         # -fno-tree-loop-distribute-patterns
         -fdata-sections
         -ffunction-sections
@@ -96,13 +91,14 @@ target_compile_options(${CMAKE_PROJECT_NAME}
         # -Wuseless-cast
         # -Wsuggest-override
         -save-temps=obj
-        # -fverbose-asm
+        -fverbose-asm
 )
 
 # add flags for linker
 target_link_options(${CMAKE_PROJECT_NAME} 
     PRIVATE
-        -nostdlib
+        -specs=nano.specs
+        # -u _printf_float
         -Wl,-Map=${CMAKE_PROJECT_NAME}.map,--gc-sections,-cref,--print-memory-usage
 )
 
@@ -111,6 +107,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     PUBLIC
     gpio
     system
+    usart
+    i2c
     mcu_options
 )
 
@@ -128,16 +126,13 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.bin
 )
 
-add_custom_command(
-    OUTPUT ${CMAKE_SOURCE_DIR}/compile_commands.json
-    COMMAND ${CMAKE_COMMAND} -E ln -sf ${CMAKE_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}/compile_commands.json
-    DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
-)
-
-add_custom_target(
-    symlink-compile-commands ALL
-    DEPENDS ${CMAKE_SOURCE_DIR}/compile_commands.json
-)
+if (CMAKE_EXPORT_COMPILE_COMMANDS)
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+            ${CMAKE_BINARY_DIR}/compile_commands.json
+            ${CMAKE_SOURCE_DIR}/compile_commands.json
+    )
+endif()
 
 function(dump_cmake_variables)
     get_cmake_property(variable_names VARIABLES)

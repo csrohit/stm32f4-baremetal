@@ -12,9 +12,9 @@ set(MCU_LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/stm32f4.ld)
 # Add compile options (example: for ARM Cortex-M, size optimization, warning level)
 target_compile_options(mcu_options
 INTERFACE
+    $<$<CONFIG:Debug>:-g -gdwarf-2 -O0>
     -mcpu=cortex-m4
     -mthumb
-    -Wall
 )
 
 # Add compile definitions (example: MCU family macro)
@@ -31,4 +31,6 @@ INTERFACE
 target_link_options(mcu_options
 INTERFACE
     -T ${MCU_LINKER_SCRIPT}
+    -mcpu=cortex-m4
+    -mthumb
 )

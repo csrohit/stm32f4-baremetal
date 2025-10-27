@@ -1,4 +1,4 @@
-TARGET      := i2c-scanner
+TARGET      := usart
 
 # debug build?Release
 BUILD_TYPE  = Release
@@ -13,8 +13,8 @@ OBJCOPY     =   ${TRIPLE}-objcopy
 
 
 
-INC_DIRS    := include lib/gpio lib/system
-SRC_DIRS    := src lib
+INC_DIRS    := include 
+SRC_DIRS    := src
 BUILD_DIR   := build
 
 SRCS        := $(shell find $(SRC_DIRS) -name '*.cpp')
