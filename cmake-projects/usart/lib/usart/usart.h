@@ -1,10 +1,10 @@
 /**
- * @file usart.h
- * @author Rohit Nimkar (nehalnimkar@gmail.com) <https://csrohit.github.io>
- * @brief Declaration of functionality related to USART
- * @version 1.2
+ * @file    usart.h
+ * @author  Rohit Nimkar (nehalnimkar@gmail.com) <https://csrohit.github.io>
+ * @brief   Declaration of functionality related to USART
+ * @version 1.0
  *
- * @copyright Copyright (c) 2022
+ * @copyright Copyright (c) 2025
  * @attention
  *
  * This software component is licensed by Rohit Nimkar under BSD 3-Clause license,
