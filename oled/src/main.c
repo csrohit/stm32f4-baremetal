@@ -22,7 +22,7 @@
 #include "oled.h"
 #include "horse_anim.h"
 
-const char *str = "I2C Scanner\r\n"; /**< Initial string */
+const char* str = "I2C Scanner\r\n"; /**< Initial string */
 char        buffer[128];             /**< Buffer for storing msg */
 char        zz[10];
 
@@ -42,8 +42,7 @@ int main(void)
 
     USARTTxBuffer(str);
 
-            GPIOToggle(GPIOC, GPIO_ODR_OD13);
-
+    GPIOToggle(GPIOC, GPIO_ODR_OD13);
 
     I2CInit();
 
@@ -56,29 +55,26 @@ int main(void)
     SSD1306_WRITECOMMAND(0xAF); /*  Turn On Display*/
     SSD1306_WRITEDATA(0xff);
 
-        SSD1306_WRITECOMMAND(0x00); /* Lower column start address */
-        SSD1306_WRITECOMMAND(0x10); /* Upper column start address */
-    for(uint8_t page = 0xB0; page <= 0xB7; ++page)
+    SSD1306_WRITECOMMAND(0x00); /* Lower column start address */
+    SSD1306_WRITECOMMAND(0x10); /* Upper column start address */
+    for (uint8_t page = 0xB0; page <= 0xB7; ++page)
     {
-        for(uint8_t i = 00; i <= 0x7f; ++i)
+        for (uint8_t i = 00; i <= 0x7f; ++i)
         {
             SSD1306_WRITEDATA(0x00);
             DelayMs(10);
         }
     }
 
-        // SSD1306_WRITECOMMAND(0xB0); /* Set Page start address */
-    for(uint8_t page = 0xB0; page <= 0xB7; ++page)
+    // SSD1306_WRITECOMMAND(0xB0); /* Set Page start address */
+    for (uint8_t page = 0xB0; page <= 0xB7; ++page)
     {
-        for(uint8_t i = 00; i <= 0x7f; ++i)
+        for (uint8_t i = 00; i <= 0x7f; ++i)
         {
             SSD1306_WRITEDATA(0xff);
             DelayMs(10);
         }
     }
-
-
-
 
     DelayMs(2000);
     SSD1306_Init();

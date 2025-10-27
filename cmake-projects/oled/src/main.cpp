@@ -16,9 +16,11 @@
 
 #include "gpio_port.h"
 #include "i2c.h"
+#include "oled.h"
 #include "stm32f4xx.h"
 #include "system.h"
 #include "usart.h"
+#include "mj.h"
 
 void InitStdOut()
 {
@@ -51,7 +53,7 @@ int main(void)
     portC.setPinMode(GPIO::PIN_13, GPIO::PinMode::OUTPUT);
 
     I2C& i2c = *new (I2C::I2c1) I2C;
-    
+
     /* Set Mode of PB6(SCL) as Alternate */
     portB.setPinMode(GPIO::PIN_6, GPIO::ALT);
 
@@ -72,6 +74,47 @@ int main(void)
 
     SysTick_Config(16000);
 
+    SSD1306 display(i2c);
+    display.Init();
+
+    i2c.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x00); //
+    i2c.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x10); //--turn on SSD1306 panel
+    for (uint8_t page = 0xB0; page <= 0xB7; ++page)
+    {
+        for (uint8_t i = 00; i <= 0x7f; ++i)
+        {
+            i2c.SendByte(SSD1306::DEV_ADDR, 0x40U, 0xFF); //--turn on SSD1306 panel
+            delay_ms(2);
+        }
+    }
+
+    // SSD1306_WRITECOMMAND(0xB0); /* Set Page start address */
+    for (uint8_t page = 0xB0; page <= 0xB7; ++page)
+    {
+        for (uint8_t i = 00; i <= 0x7f; ++i)
+        {
+            i2c.SendByte(SSD1306::DEV_ADDR, 0x40U, 0x00); //--turn on SSD1306 panel
+            delay_ms(2);
+        }
+    }
+
+    SSD1306_GotoXY(0, 0);
+    char* name = "SSD1306";
+    SSD1306_Puts(name, &Font_7x10, SSD1306_COLOR_WHITE);
+
+    SSD1306_GotoXY(0, 10);
+
+    SSD1306_Puts("github.com/chellosrohit", &Font_7x10, SSD1306_COLOR_WHITE);
+
+    SSD1306_GotoXY(0, 30);
+
+    SSD1306_Puts("OLED Display", &Font_7x10, SSD1306_COLOR_WHITE);
+
+    SSD1306_GotoXY(0, 50);
+
+    SSD1306_Puts("Bare Metal Code", &Font_7x10, SSD1306_COLOR_WHITE);
+
+    SSD1306_UpdateScreen(); // display
     while (1)
     {
         portC.togglePin(GPIO::PIN_13);

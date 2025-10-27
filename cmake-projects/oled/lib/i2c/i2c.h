@@ -11,12 +11,121 @@
  * the "License"; You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at: opensource.org/licenses/BSD-3-Clause
  */
+#pragma once
 
 #include <stddef.h>
 #include <stdint.h>
+#include "rohit.h"
 
 #include "stm32f4xx.h"
 #include "system.h"
+
+/**
+ * @brief
+ *   Generates Start condition on I2C Bus
+ */
+static inline void I2CStart()
+{
+    /* Wait till I2C bus is available */
+    while (I2C1->SR2 & I2C_SR2_BUSY)
+    {
+    }
+
+    I2C1->CR1 |= I2C_CR1_START;
+
+    /* Wait till hardware detects Start condition */
+    while (!(I2C1->SR1 & I2C_SR1_SB))
+    {
+    }
+}
+
+/**
+ * @brief
+ *   Generates Repeated Start condition on I2C Bus
+ */
+static inline void I2CRepeatStart()
+{
+    while (!(I2C1->SR1 & I2C_SR1_TXE))
+    {
+        ;
+    }
+    I2CStart();
+}
+
+/**
+ * @brief
+ *   Generates Stop condition on I2C Bus
+ */
+static inline void I2CStop()
+{
+    I2C1->CR1 |= I2C_CR1_STOP;
+}
+
+/**
+ * @brief
+ *   Get the address of slave used for writing data
+ *   The LSB of address is unset for write operation
+ *
+ * @param [in] slaveAddr
+ *   7 bit address of slave
+ *
+ * @return
+ *   8 bit write slaveAddr
+ */
+static inline uint8_t I2CGetWriteAddress(uint8_t slaveAddr)
+{
+    return ((slaveAddr << 1) & (~(1 << 0)));
+}
+
+/**
+ * @brief
+ *   Get the address of slave used for reading data
+ *   The LSB of address is set for read operation
+ *
+ * @param [in] slaveAddr
+ *   7 bit address of slave
+ *
+ * @return
+ *   8 bit read slaveAddr
+ */
+static inline uint8_t I2CGetReadAddress(uint8_t slaveAddr)
+{
+    return ((slaveAddr << 1) | (1 << 0));
+}
+
+/**
+ * @brief
+ *   Sends the slave address over I2C bus
+ *
+ * @param [in] slaveAddr
+ *   Address of slave device
+ *
+ * @return
+ *   0 if ACK received else 1
+ */
+static inline int I2CSendSlaveAddress(uint8_t slaveaddr)
+{
+    int res = 0;
+
+    /* Write slave address to data register */
+    I2C1->DR = slaveaddr;
+
+    /* Wait for transmit operation completion */
+    while (!((I2C1->SR1 & I2C_SR1_ADDR) || (I2C1->SR1 & I2C_SR1_AF)))
+    {
+    }
+
+    /* Check for acknowledgement failure */
+    res = I2C1->SR1 & I2C_SR1_AF;
+
+    /* Clear I2C_SR1_AF flag */
+    I2C1->SR1 = I2C1->SR1 & ~I2C_SR1_AF;
+
+    /* Clear I2C_SR1_ADDR flag */
+    (void)I2C1->SR2;
+
+    return res;
+}
 
 class I2C : I2C_TypeDef
 {
@@ -77,6 +186,69 @@ class I2C : I2C_TypeDef
 
         /* Wait till data transmission is complete */
         /* TODO: add check for NACK, as BTF is not set when NACK is received */
+        while (!(SR1 & I2C_SR1_BTF))
+        {
+        }
+
+        Stop();
+    }
+
+    /**
+     * @brief
+     *   Send data to a slave
+     *
+     * @pre
+     *   I2CIsDeviceReady()
+     *   The address should point to a valid device connected on the bus
+     *
+     * @param [in] slaveAddr
+     *   7 bit address of slave
+     *
+     * @param [in] regAddr
+     *   Address of register to write to
+     *
+     * @param [in] val
+     *   8 bit data to be sent
+     */
+    void SendByte(uint8_t slaveAddr, uint8_t regAddr, uint8_t val)
+    {
+        // I2CStart();
+        // I2CSendSlaveAddress(I2CGetWriteAddress(slaveAddr));
+        //
+        // /* Write data to DR to send */
+        // while (!(I2C1->SR1 & I2C_SR1_TXE))
+        // {
+        //     ;
+        // } /*Wait until Data register empty*/
+        // I2C1->DR = regAddr;
+        // while (!(I2C1->SR1 & I2C_SR1_TXE))
+        // {
+        // }
+        //
+        // /* Write data to DR to send */
+        // I2C1->DR = val;
+        // while (!(I2C1->SR1 & I2C_SR1_BTF))
+        // {
+        // }
+        //
+        // I2CStop();
+        //
+        // return;
+        Start();
+        SendSlaveAddress(GetWriteAddress(slaveAddr));
+
+        /* Write data to DR to send */
+        while (!(SR1 & I2C_SR1_TXE))
+        {
+            ;
+        } /*Wait until Data register empty*/
+        DR = regAddr;
+        while (!(SR1 & I2C_SR1_TXE))
+        {
+        }
+
+        /* Write data to DR to send */
+        DR = val;
         while (!(SR1 & I2C_SR1_BTF))
         {
         }
