@@ -13,9 +13,9 @@
  */
 #pragma once
 
+#include "rohit.h"
 #include <stddef.h>
 #include <stdint.h>
-#include "rohit.h"
 
 #include "stm32f4xx.h"
 #include "system.h"
@@ -159,35 +159,52 @@ class I2C : I2C_TypeDef
 
     /**
      * @brief
-     *   Send data to a slave
+     *   Write multiple bytes to a slave
      *
      * @pre
-     *   IsDeviceReady()
+     *   I2CIsDeviceReady()
      *   The address should point to a valid device connected on the bus
      *
      * @param [in] slaveAddr
      *   7 bit address of slave
      *
-     * @param [in] val
-     *   8 bit data to be sent
+     * @param [in] regAddr
+     *   Address of register to start writing to
+     *
+     * @param [in] pVal
+     *   Address of first byte
+     *
+     * @param [in] nBytes
+     *   Number of bytes to write
+     *
+     * @return
+     *   0 if success else 1
      */
-    void SendData(uint8_t slaveAddr, uint8_t val)
+    void SendData(uint8_t slaveAddr, uint8_t regAddr, uint8_t* pData, uint8_t nBytes)
     {
-        /* Wait till transmit buffer is empty */
-        while (!(SR1 & I2C_SR1_TXE))
-        {
-        }
-
         Start();
+
         SendSlaveAddress(GetWriteAddress(slaveAddr));
 
-        /* Write data to DR to send */
-        I2C1->DR = val;
+        while (!(SR1 & I2C_SR1_TXE))
+        {
+            ;
+        }
+        DR = regAddr;
 
-        /* Wait till data transmission is complete */
-        /* TODO: add check for NACK, as BTF is not set when NACK is received */
+        for (uint8_t i = 0; i < nBytes; i++)
+        {
+            while (!(SR1 & I2C_SR1_TXE))
+            {
+                ;
+            }
+            DR = pData[i];
+        }
+
+        /* Wait for transation to complete */
         while (!(SR1 & I2C_SR1_BTF))
         {
+            ;
         }
 
         Stop();

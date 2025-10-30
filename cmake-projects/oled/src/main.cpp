@@ -98,23 +98,29 @@ int main(void)
         }
     }
 
-    SSD1306_GotoXY(0, 0);
-    char* name = "SSD1306";
-    SSD1306_Puts(name, &Font_7x10, SSD1306_COLOR_WHITE);
+    // delay_ms(1000);
+    // i2c.SendByte(SSD1306::DEV_ADDR, 0x00, 0xA5);
+    // delay_ms(1000);
+    // i2c.SendByte(SSD1306::DEV_ADDR, 0x00, 0xA4);
 
-    SSD1306_GotoXY(0, 10);
 
-    SSD1306_Puts("github.com/chellosrohit", &Font_7x10, SSD1306_COLOR_WHITE);
+    display.GotoXY(0, 0);
+    display.Puts("SSD1306", &Font_7x10, SSD1306_COLOR_WHITE);
 
-    SSD1306_GotoXY(0, 30);
+    display.GotoXY(0, 10);
+    display.Puts("github.com/chellosrohit", &Font_7x10, SSD1306_COLOR_WHITE);
 
-    SSD1306_Puts("OLED Display", &Font_7x10, SSD1306_COLOR_WHITE);
+    display.GotoXY(0, 30);
+    display.Puts("OLED Display", &Font_7x10, SSD1306_COLOR_WHITE);
 
-    SSD1306_GotoXY(0, 50);
+    display.GotoXY(0, 50);
+    display.Puts("Bare Metal Code", &Font_7x10, SSD1306_COLOR_WHITE);
 
-    SSD1306_Puts("Bare Metal Code", &Font_7x10, SSD1306_COLOR_WHITE);
+    display.Refresh();
+    delay_ms(2000);
 
-    SSD1306_UpdateScreen(); // display
+    // display.DrawBitmap(0, 0, mj, 128, 64, SSD1306_COLOR_WHITE);
+    // display.Refresh();
     while (1)
     {
         portC.togglePin(GPIO::PIN_13);
