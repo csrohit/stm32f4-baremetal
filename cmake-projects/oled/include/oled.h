@@ -1,5 +1,5 @@
 /**
- * @file     h
+ * @file     oled.h
  * @author   Rohit Nimkar <https://csrohit.github.io>
  * @brief    Declaration of SSD1306 functionality
  * @version  1.0
@@ -16,24 +16,6 @@
 #include "fonts.h"
 #include "i2c.h"
 #include <stdint.h>
-
-typedef enum
-{
-    SSD1306_COLOR_BLACK = 0x00, /*!< Black color, no pixel */
-    SSD1306_COLOR_WHITE = 0x01  /*!< Pixel is set. Color depends on LCD */
-} SSD1306_COLOR_t;
-
-/* Private SSD1306 structure */
-typedef struct
-{
-    uint16_t CurrentX;
-    uint16_t CurrentY;
-    uint8_t  Inverted;
-    uint8_t  Initialized;
-} SSD1306_t;
-
-/* Private variable */
-extern char SSD1306_Buffer[];
 
 #define SSD1306_RIGHT_HORIZONTAL_SCROLL              0x26
 #define SSD1306_LEFT_HORIZONTAL_SCROLL               0x27
@@ -76,7 +58,13 @@ SDA        |PB9          |Serial data line
 class SSD1306
 {
   public:
-    enum DisplayMode
+    typedef enum
+    {
+        ColorBlack = 0x00, /*!< Black color, no pixel */
+        ColorWhite = 0x01  /*!< Pixel is set. Color depends on LCD */
+    } DisplayColor;
+
+    enum DisplayInversionMode
     {
         DISPLAY_NORMAL  = 0xA6,
         DISPLAY_INVERSE = 0xA7
@@ -93,10 +81,10 @@ class SSD1306
     static constexpr uint8_t DEV_ADDR = 0x3CU;
 
   private:
-    uint16_t CurrentX;
-    uint16_t CurrentY;
-    uint8_t  Inverted;
-    uint8_t  Initialized;
+    uint16_t x             = 0U;
+    uint16_t y             = 0U;
+    bool     isInverted    = false;
+    bool     isInitialized = false;
     I2C&     i2cDev;
 
     uint8_t FrameBuffer[WIDTH * HEIGHT / sizeof(char)];
@@ -140,21 +128,17 @@ class SSD1306
 
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, SSD1306_DEACTIVATE_SCROLL);
 
-        // /* Clear screen */
-        // SSD1306_Fill(SSD1306_COLOR_BLACK);
-        //
-        // /* Update screen */
-        // SSD1306_UpdateScreen();
+        Fill(ColorBlack);
 
         /* Set default values */
-        CurrentX = 0;
-        CurrentY = 0;
+        x = 0;
+        y = 0;
 
         /* Initialized OK */
-        Initialized = 1;
+        isInitialized = 1;
     }
 
-    char Puts(const char* str, FontDef_t* Font, SSD1306_COLOR_t color)
+    char Puts(const char* str, FontDef_t* Font, DisplayColor color)
     {
         /* Write characters */
         while (*str)
@@ -174,12 +158,12 @@ class SSD1306
         return *str;
     }
 
-    char Putc(char ch, FontDef_t* Font, SSD1306_COLOR_t color)
+    char Putc(char ch, FontDef_t* Font, DisplayColor color)
     {
         uint32_t i, b, j;
 
         /* Check available space in LCD */
-        if (WIDTH <= (CurrentX + Font->FontWidth) || HEIGHT <= (CurrentY + Font->FontHeight))
+        if (WIDTH <= (x + Font->FontWidth) || HEIGHT <= (y + Font->FontHeight))
         {
             /* Error */
             return 0;
@@ -193,23 +177,23 @@ class SSD1306
             {
                 if ((b << j) & 0x8000)
                 {
-                    DrawPixel(CurrentX + j, (CurrentY + i), (SSD1306_COLOR_t)color);
+                    DrawPixel(x + j, (y + i), (DisplayColor)color);
                 }
                 else
                 {
-                    DrawPixel(CurrentX + j, (CurrentY + i), (SSD1306_COLOR_t)!color);
+                    DrawPixel(x + j, (y + i), (DisplayColor)!color);
                 }
             }
         }
 
         /* Increase pointer */
-        CurrentX += Font->FontWidth;
+        x += Font->FontWidth;
 
         /* Return character written */
         return ch;
     }
 
-    void DrawPixel(uint16_t x, uint16_t y, SSD1306_COLOR_t color)
+    void DrawPixel(uint16_t x, uint16_t y, DisplayColor color)
     {
         if (x >= WIDTH || y >= HEIGHT)
         {
@@ -218,13 +202,13 @@ class SSD1306
         }
 
         /* Check if pixels are inverted */
-        if (Inverted)
+        if (isInverted)
         {
-            color = (SSD1306_COLOR_t)!color;
+            color = (DisplayColor)!color;
         }
 
         /* Set color */
-        if (color == SSD1306_COLOR_WHITE)
+        if (color == ColorWhite)
         {
             FrameBuffer[x + (y / 8) * WIDTH] |= 1 << (y % 8);
         }
@@ -249,7 +233,7 @@ class SSD1306
         }
     }
 
-    void DrawBitmap(int16_t x, int16_t y, const unsigned char* bitmap, int16_t w, int16_t h, SSD1306_COLOR_t color)
+    void DrawBitmap(int16_t x, int16_t y, const unsigned char* bitmap, int16_t w, int16_t h, DisplayColor color)
     {
 
         int16_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte
@@ -333,31 +317,22 @@ class SSD1306
         SSD1306_WRITECOMMAND(SSD1306_DEACTIVATE_SCROLL);
     }
 
-    void InvertDisplay(int i)
-    {
-        if (i)
-            SSD1306_WRITECOMMAND(SSD1306_INVERTDISPLAY);
-
-        else
-            SSD1306_WRITECOMMAND(SSD1306_NORMALDISPLAY);
-    }
-
-    void Fill(SSD1306_COLOR_t color)
+    void Fill(DisplayColor color)
     {
         /* Set memory */
-        memset(FrameBuffer, (color == SSD1306_COLOR_BLACK) ? 0x00 : 0xFF, sizeof(FrameBuffer));
+        memset(FrameBuffer, (color == ColorBlack) ? 0x00 : 0xFF, sizeof(FrameBuffer));
     }
 
-    void GotoXY(uint16_t x, uint16_t y)
+    void GotoXY(uint16_t targetX, uint16_t targetY)
     {
         /* Set write pointers */
-        CurrentX = x;
-        CurrentY = y;
+        x = targetX;
+        y = targetY;
     }
 
     void Clear(void)
     {
-        Fill(SSD1306_COLOR_BLACK);
+        Fill(ColorBlack);
         Refresh();
     }
 
@@ -366,7 +341,7 @@ class SSD1306
         SendCommand(source);
     }
 
-    void SetDisplayMode(const DisplayMode mode)
+    void SetDisplayInversionMode(const DisplayInversionMode mode)
     {
         SendCommand(mode);
     }

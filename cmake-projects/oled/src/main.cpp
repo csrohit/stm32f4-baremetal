@@ -84,7 +84,7 @@ int main(void)
         for (uint8_t i = 00; i <= 0x7f; ++i)
         {
             i2c.SendByte(SSD1306::DEV_ADDR, 0x40U, 0xFF); //--turn on SSD1306 panel
-            delay_ms(2);
+            delay_ms(1);
         }
     }
 
@@ -94,49 +94,32 @@ int main(void)
         for (uint8_t i = 00; i <= 0x7f; ++i)
         {
             i2c.SendByte(SSD1306::DEV_ADDR, 0x40U, 0x00); //--turn on SSD1306 panel
-            delay_ms(2);
+            delay_ms(1);
         }
     }
 
-    // delay_ms(1000);
-    // i2c.SendByte(SSD1306::DEV_ADDR, 0x00, 0xA5);
-    // delay_ms(1000);
-    // i2c.SendByte(SSD1306::DEV_ADDR, 0x00, 0xA4);
-
-
     display.GotoXY(0, 0);
-    display.Puts("SSD1306", &Font_7x10, SSD1306_COLOR_WHITE);
+    display.Puts("SSD1306", &Font_11x18, SSD1306::ColorWhite);
 
-    display.GotoXY(0, 10);
-    display.Puts("github.com/chellosrohit", &Font_7x10, SSD1306_COLOR_WHITE);
+    display.GotoXY(0, 24);
+    display.Puts("github.com/csrohit", &Font_7x10, SSD1306::ColorWhite);
 
-    display.GotoXY(0, 30);
-    display.Puts("OLED Display", &Font_7x10, SSD1306_COLOR_WHITE);
+    display.GotoXY(0, 38);
+    display.Puts("OLED Display", &Font_7x10, SSD1306::ColorWhite);
 
-    display.GotoXY(0, 50);
-    display.Puts("Bare Metal Code", &Font_7x10, SSD1306_COLOR_WHITE);
+    display.GotoXY(0, 52);
+    display.Puts("Bare Metal Code", &Font_7x10, SSD1306::ColorWhite);
 
     display.Refresh();
     delay_ms(2000);
 
-    // display.DrawBitmap(0, 0, mj, 128, 64, SSD1306_COLOR_WHITE);
+    // display.Fill(SSD1306::ColorBlack);
+    // display.DrawBitmap(0, 0, mj, 128, 64, SSD1306::ColorWhite);
     // display.Refresh();
+
     while (1)
     {
         portC.togglePin(GPIO::PIN_13);
         delay_ms(1000);
-        printf("I2C Scanner...\r\n");
-
-        for (uint8_t address = 0x01; address < 128; ++address)
-        {
-            int res = i2c.IsDeviceReady(address);
-            if (0 == res)
-            {
-                printf("Device Found at address %#x\r\n", address);
-            }
-
-            delay_ms(20);
-        }
-        delay_ms(5000);
     }
 }
