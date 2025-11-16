@@ -138,7 +138,7 @@ class SSD1306
         isInitialized = 1;
     }
 
-    char Puts(const char* str, FontDef_t* Font, DisplayColor color)
+    char Puts(const char* str, Fonts::FontDef_t* Font, DisplayColor color)
     {
         /* Write characters */
         while (*str)
@@ -158,36 +158,36 @@ class SSD1306
         return *str;
     }
 
-    char Putc(char ch, FontDef_t* Font, DisplayColor color)
+    char Putc(char ch, Fonts::FontDef_t* Font, DisplayColor color)
     {
         uint32_t i, b, j;
 
         /* Check available space in LCD */
-        if (WIDTH <= (x + Font->FontWidth) || HEIGHT <= (y + Font->FontHeight))
+        if (WIDTH <= (x + Font->width) || HEIGHT <= (y + Font->height))
         {
             /* Error */
             return 0;
         }
 
         /* Go through font */
-        for (i = 0; i < Font->FontHeight; i++)
+        for (i = 0; i < Font->height; i++)
         {
-            b = Font->data[(ch - 32) * Font->FontHeight + i];
-            for (j = 0; j < Font->FontWidth; j++)
+            b = Font->pData[(ch - 32) * Font->height + i];
+            for (j = 0; j < Font->width; j++)
             {
                 if ((b << j) & 0x8000)
                 {
-                    DrawPixel(x + j, (y + i), (DisplayColor)color);
+                    DrawPixel(x + j, (y + i), color);
                 }
                 else
                 {
-                    DrawPixel(x + j, (y + i), (DisplayColor)!color);
+                    DrawPixel(x + j, (y + i), color);
                 }
             }
         }
 
         /* Increase pointer */
-        x += Font->FontWidth;
+        x += Font->width;
 
         /* Return character written */
         return ch;

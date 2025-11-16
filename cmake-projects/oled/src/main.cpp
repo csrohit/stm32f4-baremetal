@@ -99,23 +99,23 @@ int main(void)
     }
 
     display.GotoXY(0, 0);
-    display.Puts("SSD1306", &Font_11x18, SSD1306::ColorWhite);
+    display.Puts("SSD1306", &Fonts::Font_11x18, SSD1306::ColorWhite);
 
     display.GotoXY(0, 24);
-    display.Puts("github.com/csrohit", &Font_7x10, SSD1306::ColorWhite);
+    display.Puts("github.com/csrohit", &Fonts::Font_7x10, SSD1306::ColorWhite);
 
     display.GotoXY(0, 38);
-    display.Puts("OLED Display", &Font_7x10, SSD1306::ColorWhite);
+    display.Puts("OLED Display", &Fonts::Font_7x10, SSD1306::ColorWhite);
 
     display.GotoXY(0, 52);
-    display.Puts("Bare Metal Code", &Font_7x10, SSD1306::ColorWhite);
+    display.Puts("Bare Metal Code", &Fonts::Font_7x10, SSD1306::ColorWhite);
 
     display.Refresh();
-    delay_ms(2000);
+    delay_ms(4000);
 
-    // display.Fill(SSD1306::ColorBlack);
-    // display.DrawBitmap(0, 0, mj, 128, 64, SSD1306::ColorWhite);
-    // display.Refresh();
+    display.Fill(SSD1306::ColorBlack);
+    display.DrawBitmap(0, 0, mj, 128, 64, SSD1306::ColorWhite);
+    display.Refresh();
 
     while (1)
     {
