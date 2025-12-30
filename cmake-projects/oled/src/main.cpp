@@ -77,26 +77,26 @@ int main(void)
     SSD1306 display(i2c);
     display.Init();
 
-    i2c.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x00); //
-    i2c.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x10); //--turn on SSD1306 panel
-    for (uint8_t page = 0xB0; page <= 0xB7; ++page)
-    {
-        for (uint8_t i = 00; i <= 0x7f; ++i)
-        {
-            i2c.SendByte(SSD1306::DEV_ADDR, 0x40U, 0xFF); //--turn on SSD1306 panel
-            delay_ms(1);
-        }
-    }
-
-    // SSD1306_WRITECOMMAND(0xB0); /* Set Page start address */
-    for (uint8_t page = 0xB0; page <= 0xB7; ++page)
-    {
-        for (uint8_t i = 00; i <= 0x7f; ++i)
-        {
-            i2c.SendByte(SSD1306::DEV_ADDR, 0x40U, 0x00); //--turn on SSD1306 panel
-            delay_ms(1);
-        }
-    }
+    // i2c.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x00); //
+    // i2c.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x10); //--turn on SSD1306 panel
+    // for (uint8_t page = 0xB0; page <= 0xB7; ++page)
+    // {
+    //     for (uint8_t i = 00; i <= 0x7f; ++i)
+    //     {
+    //         i2c.SendByte(SSD1306::DEV_ADDR, 0x40U, 0xFF); //--turn on SSD1306 panel
+    //         delay_ms(1);
+    //     }
+    // }
+    //
+    // // SSD1306_WRITECOMMAND(0xB0); /* Set Page start address */
+    // for (uint8_t page = 0xB0; page <= 0xB7; ++page)
+    // {
+    //     for (uint8_t i = 00; i <= 0x7f; ++i)
+    //     {
+    //         i2c.SendByte(SSD1306::DEV_ADDR, 0x40U, 0x00); //--turn on SSD1306 panel
+    //         delay_ms(1);
+    //     }
+    // }
 
     display.GotoXY(0, 0);
     display.Puts("SSD1306", &Fonts::Font_11x18, SSD1306::ColorWhite);

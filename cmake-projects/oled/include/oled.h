@@ -58,11 +58,45 @@ SDA        |PB9          |Serial data line
 class SSD1306
 {
   public:
-    typedef enum
+    enum MemoryAddressingMode
+    {
+        /**
+         * In Page addressing mode, after GDDRAM is read/written the column address pointer is
+         * increased automatically by 1.
+         * If the column address pointer reaches the column end address, the column address
+         * pointer is reset to column start address and page address pointer is increased by 1.
+         *
+         * When both column and page address pointers reach end address, the pointers are reset to
+         * column start address and page start address.
+         */
+        AddressingModeHorizontal = 0x00,
+
+        /**
+         * In Page addressing mode, after GDDRAM is read/written the page address pointer is
+         * increased automatically by 1.
+         * If the page address pointer reaches the page end address, the page address
+         * pointer is reset to page start address and column address pointer is increased by 1.
+         *
+         * When both column and page address pointers reach end address, the pointers are reset to
+         * column start address and page start address.
+         */
+        AddressingModeVertical   = 0x01,
+
+        /**
+         * In Page addressing mode, after GDDRAM is read/written the column address pointer is
+         * increased automatically by 1.
+         * If the column address pointer reached the column end address, the column address
+         * pointer is reset to column start address and page address pointer is not changed.
+         */
+        AddressingModePage       = 0x10,
+        AddressingModeInvalid    = 0x11,
+    };
+
+    enum DisplayColor
     {
         ColorBlack = 0x00, /*!< Black color, no pixel */
-        ColorWhite = 0x01  /*!< Pixel is set. Color depends on LCD */
-    } DisplayColor;
+        ColorWhite = 0x01 /*!< Pixel is set. Color depends on LCD */
+    };
 
     enum DisplayInversionMode
     {
@@ -72,8 +106,14 @@ class SSD1306
 
     enum DisplaySource
     {
-        DISPLAY_ON  = 0xA5,
-        DISPLAY_RAM = 0xA4
+        AllPixelsOn      = 0xA5, /* All pixels on, ignores RAM content */
+        FollowRamContent = 0xA4  /* Output follows RAM content */
+    };
+
+    enum ChargePumpState
+    {
+        ChargePumpEnable  = 0x14, /* Enable charge pump */
+        ChargePumpDisable = 0x10, /* Disable charge pump */
     };
 
     static constexpr uint8_t HEIGHT   = 64U;
@@ -81,6 +121,13 @@ class SSD1306
     static constexpr uint8_t DEV_ADDR = 0x3CU;
 
   private:
+    /* Commands */
+    static constexpr uint8_t SET_MEMORY_ADDRESSING_MODE = static_cast<uint8_t>(0x20);
+    static constexpr uint8_t SET_CONTRAST_LEVEL         = static_cast<uint8_t>(0x81);
+    static constexpr uint8_t DISPLAY_ON                 = static_cast<uint8_t>(0xAF);
+    static constexpr uint8_t DISPLAY_OFF                = static_cast<uint8_t>(0xAE);
+    static constexpr uint8_t SET_CHARGE_PUMP_STATE      = static_cast<uint8_t>(0x8D);
+
     uint16_t x             = 0U;
     uint16_t y             = 0U;
     bool     isInverted    = false;
@@ -98,22 +145,22 @@ class SSD1306
     {
         /* Init LCD */
         PowerOff();
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x20); // Set Memory Addressing Mode
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x00); // 00,Horizontal Addressing Mode;01,Vertical Addressing Mode;10,Page Addressing Mode (RESET);11,Invalid
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xB0); // Set Page Start Address for Page Addressing Mode,0-7
+        SetMemoryAddressingMode(AddressingModeHorizontal);
+
+        SetContrastLevel(0xFF);
+
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xC8); // Set COM Output Scan Direction
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x00); //---set low column address
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x10); //---set high column address
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x40); //--set start line address
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x81); //--set contrast control register
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xFF);
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xA1); //--set segment re-map 0 to 127
+
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xA6); //--set normal display
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xA8); //--set multiplex ratio(1 to 64)
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x3F); //
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xA4); // 0xa4,Output follows RAM content;0xa5,Output ignores RAM content
+
+        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x40); //--set start line address
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xD3); //-set display offset
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x00); //-not offset
+        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0x04); //-not offset
+
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xD5); //--set display clock divide ratio/oscillator frequency
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xF0); //--set divide ratio
         i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xD9); //--set pre-charge period
@@ -352,9 +399,8 @@ class SSD1306
      */
     void PowerOn(void)
     {
-        SSD1306_WRITECOMMAND(0x8D);
-        SSD1306_WRITECOMMAND(0x14);
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xAF); // display off
+        SetChargePumpState(ChargePumpEnable);
+        DisplayOn();
     }
 
     /*
@@ -363,9 +409,8 @@ class SSD1306
      */
     void PowerOff(void)
     {
-        SSD1306_WRITECOMMAND(0x8D);
-        SSD1306_WRITECOMMAND(0x10);
-        i2cDev.SendByte(SSD1306::DEV_ADDR, 0x00U, 0xAE); // display off
+        SetChargePumpState(ChargePumpDisable);
+        DisplayOff();
     }
 
   private:
